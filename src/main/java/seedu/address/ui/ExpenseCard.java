@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -25,13 +26,17 @@ public class ExpenseCard extends UiPart<Region> {
     public final Expense expense;
 
     @FXML
-    private HBox cardPane;
+    private AnchorPane cardPane;
     @FXML
     private Label description;
     @FXML
     private Label index;
     @FXML
     private Label price;
+    @FXML
+    private Label date;
+    @FXML
+    private Label time;
     @FXML
     private FlowPane categories;
     @FXML
@@ -40,7 +45,7 @@ public class ExpenseCard extends UiPart<Region> {
     public ExpenseCard(Expense expense, int displayedIndex) {
         super(FXML);
         this.expense = expense;
-        index.setText(displayedIndex + ". ");
+        index.setText(Integer.toString(displayedIndex));
         description.setText(expense.getDescription().fullDescription);
         price.setText("$" + expense.getPrice().value);
         categories.getChildren().add(new Label(expense.getCategory().getCategoryName()));
