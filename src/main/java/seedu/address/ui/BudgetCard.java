@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -67,6 +68,57 @@ public class BudgetCard extends UiPart<Region> {
 
         // progress bar
         budgetProgressBar.setProgress(total/allocated);
+
+        budget.getExpenses().addListener(new ListChangeListener<Expense>() {
+            @Override
+            public void onChanged(Change<? extends Expense> change) {
+                change.next();
+                if (change.wasAdded()) {
+                    // update total
+                    System.out.println("expense added");
+                    double total = 0.0;
+                    for (Expense e : budget.getExpenses()) {
+                        total += e.getPrice().getAsDouble();
+                    }
+                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
+                    budgetProgressBar.setProgress(total/allocated);
+
+                }
+                if (change.wasRemoved()) {
+                    // update total
+                    System.out.println("expense deleted");
+                    double total = 0.0;
+                    for (Expense e : budget.getExpenses()) {
+                        total += e.getPrice().getAsDouble();
+                    }
+                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
+                    budgetProgressBar.setProgress(total/allocated);
+
+                }
+                if (change.wasUpdated()) {
+                    // update total
+                    System.out.println("expense updated");
+                    double total = 0.0;
+                    for (Expense e : budget.getExpenses()) {
+                        total += e.getPrice().getAsDouble();
+                    }
+                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
+                    budgetProgressBar.setProgress(total/allocated);
+
+                }
+                if (change.wasReplaced()) {
+                    // update total
+                    System.out.println("expense replaced");
+                    double total = 0.0;
+                    for (Expense e : budget.getExpenses()) {
+                        total += e.getPrice().getAsDouble();
+                    }
+                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
+                    budgetProgressBar.setProgress(total/allocated);
+
+                }
+            }
+        });
 
     }
 
