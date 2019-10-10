@@ -202,6 +202,15 @@ public interface Model {
 
     boolean hasEvent(Event event);
 
+    /** Returns an unmodifiable view of the filtered expense list */
+    ObservableList<Budget> getFilteredBudgetList();
+
+    /**
+     * Updates the filter of the filtered expense list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
+    void updateFilteredBudgetList(Predicate<Budget> predicate);
+
     void addEvent(Event event);
 
     void deleteEvent(Event target);
