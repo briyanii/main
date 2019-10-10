@@ -1,10 +1,12 @@
 package seedu.address.ui;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.expense.Expense;
 
@@ -39,8 +41,6 @@ public class ExpenseCard extends UiPart<Region> {
     private Label time;
     @FXML
     private FlowPane categories;
-    @FXML
-    private HBox priceColumn;
 
     public ExpenseCard(Expense expense, int displayedIndex) {
         super(FXML);
@@ -49,6 +49,7 @@ public class ExpenseCard extends UiPart<Region> {
         description.setText(expense.getDescription().fullDescription);
         price.setText("$" + expense.getPrice().value);
         categories.getChildren().add(new Label(expense.getCategory().getCategoryName()));
+        date.setText(expense.getTimestamp().timestamp.format(DateTimeFormatter.ISO_DATE));
     }
 
     @Override
