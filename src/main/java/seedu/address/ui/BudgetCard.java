@@ -68,6 +68,12 @@ public class BudgetCard extends UiPart<Region> {
 
         // progress bar
         budgetProgressBar.setProgress(total/allocated);
+        // progress bar colour
+        if(budget.isExceeded()) {
+            budgetProgressBar.setStyle("-fx-accent: darkred");
+        } else {
+            budgetProgressBar.setStyle("-fx-accent: skyblue");
+        }
 
         budget.getExpenses().addListener(new ListChangeListener<Expense>() {
             @Override
@@ -115,8 +121,14 @@ public class BudgetCard extends UiPart<Region> {
                     }
                     budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
                     budgetProgressBar.setProgress(total/allocated);
-
                 }
+
+                if(budget.isExceeded()) {
+                    budgetProgressBar.setStyle("-fx-accent: darkred");
+                } else {
+                    budgetProgressBar.setStyle("-fx-accent: skyblue");
+                }
+
             }
         });
 
