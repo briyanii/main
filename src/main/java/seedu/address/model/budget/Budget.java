@@ -107,6 +107,10 @@ public class Budget {
         return proportionUsed;
     }
 
+    public void removeExpense(Expense e) {
+        expenses.remove(e);
+    }
+
     /**
      * Dummy.
      * @return Dummy.
