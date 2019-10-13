@@ -82,6 +82,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public Budget getPrimaryBudget() {
+        return model.getPrimaryBudget();
+    }
+
+    @Override
     public Path getAddressBookFilePath() {
         return model.getAddressBookFilePath();
     }

@@ -75,6 +75,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         budgets.setPrimary(budget);
     }
 
+    public Budget getPrimaryBudget() {
+        for (Budget b : budgets) {
+            if (b.isPrimary()) {
+                return b;
+            }
+        }
+        return null;
+    }
+
     /**
      * Replaces the contents of the expense list with {@code expenses}.
      * {@code expenses} must not contain duplicate expenses.
