@@ -28,7 +28,7 @@ public class BudgetCard extends UiPart<Region> {
      */
 
     @FXML
-    private AnchorPane cardPane;
+    private AnchorPane budgetCardPane;
     @FXML
     private Label budgetName;
     @FXML

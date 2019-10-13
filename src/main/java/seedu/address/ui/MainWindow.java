@@ -15,10 +15,12 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
@@ -219,6 +221,9 @@ public class MainWindow extends UiPart<Stage> {
     @FXML
     private boolean viewBudgetPanel() {
         if (logic.getPrimaryBudget() == null) {
+            Label label = new Label("No Primary Budget. This is a Placeholder.");
+            label.setBackground(Background.EMPTY);
+            panelPlaceholder.getChildren().set(0, label);
             return false;
         }
         budgetPanel = new BudgetPanel(logic.getPrimaryBudget());
