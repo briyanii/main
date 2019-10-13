@@ -26,7 +26,8 @@ public class BudgetPanel extends UiPart<Region> {
     @FXML
     private Button next;
     @FXML
-    private ListView<Expense> expenseListView;
+    private StackPane expenseListPanelPlaceholder;
+    private ExpenseListPanel expenseListPanel;
 
     private Budget budget;
     private BudgetCard budgetCard;
@@ -34,28 +35,9 @@ public class BudgetPanel extends UiPart<Region> {
     public BudgetPanel(Budget budget) {
         super(FXML);
         this.budget = budget;
-
-        expenseListView.setItems(this.budget.getExpenses());
-        expenseListView.setCellFactory(listView -> new BudgetPanel.ExpenseListViewCell());
+        expenseListPanel = new ExpenseListPanel(this.budget.getExpenses());
+        expenseListPanelPlaceholder.getChildren().add(expenseListPanel.getRoot());
         budgetCardPlaceholder.getChildren().add(new BudgetCard(this.budget).getRoot());
-
-    }
-
-    /**
-     * Custom {@code ListCell} that displays the graphics of a {@code Expense} using a {@code ExpenseCard}.
-     */
-    class ExpenseListViewCell extends ListCell<Expense> {
-        @Override
-        protected void updateItem(Expense expense, boolean empty) {
-            super.updateItem(expense, empty);
-
-            if (empty || expense == null) {
-                setGraphic(null);
-                setText(null);
-            } else {
-                setGraphic(new ExpenseCard(expense, getIndex() + 1).getRoot());
-            }
-        }
     }
 
 }
