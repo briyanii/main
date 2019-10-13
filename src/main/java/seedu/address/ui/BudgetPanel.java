@@ -32,7 +32,7 @@ public class BudgetPanel extends UiPart<Region> {
     public BudgetPanel(Budget budget) {
         super(FXML);
         this.budget = budget;
-        expenseListPanel = new ExpenseListPanel(this.budget.getExpenses());
+        expenseListPanel = new ExpenseListPanel(this.budget.getExpenses(), false);
         expenseListPanelPlaceholder.getChildren().add(expenseListPanel.getRoot());
         budgetCardPlaceholder.getChildren().add(new BudgetCard(this.budget).getRoot());
     }

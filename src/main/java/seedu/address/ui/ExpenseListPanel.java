@@ -4,9 +4,11 @@ import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.expense.Expense;
 
@@ -14,17 +16,23 @@ import seedu.address.model.expense.Expense;
  * Panel containing the list of expenses.
  */
 public class ExpenseListPanel extends UiPart<Region> {
-    private static final String FXML = "ExpenseListPanel.fxml";
+    private static final String FXML = "ListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(ExpenseListPanel.class);
 
     @FXML
-    private ListView<Expense> expenseListView;
+    private StackPane titlePlaceHolder;
+    @FXML
+    private ListView<Expense> listView;
 
-    public ExpenseListPanel(ObservableList<Expense> expenseList) {
+    public ExpenseListPanel(ObservableList<Expense> expenseList, boolean withTitle) {
         super(FXML);
 
-        expenseListView.setItems(expenseList);
-        expenseListView.setCellFactory(listView -> new ExpenseListViewCell());
+        titlePlaceHolder.setMinHeight(0);
+        if (withTitle) {
+            titlePlaceHolder.getChildren().add(new Label("Expense List"));
+        }
+        listView.setItems(expenseList);
+        listView.setCellFactory(listView -> new ExpenseListViewCell());
 
     }
 

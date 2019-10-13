@@ -4,9 +4,11 @@ import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
 
@@ -14,17 +16,20 @@ import seedu.address.model.budget.Budget;
  * Panel containing the list of budgets.
  */
 public class BudgetListPanel extends UiPart<Region> {
-    private static final String FXML = "BudgetListPanel.fxml";
+    private static final String FXML = "ListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(BudgetListPanel.class);
 
     @FXML
-    private ListView<Budget> budgetListView;
+    private StackPane titlePlaceHolder;
+    @FXML
+    private ListView<Budget> listView;
 
     public BudgetListPanel(ObservableList<Budget> budgetList) {
         super(FXML);
 
-        budgetListView.setItems(budgetList);
-        budgetListView.setCellFactory(listView -> new BudgetListViewCell());
+        titlePlaceHolder.getChildren().add(new Label("Budget List"));
+        listView.setItems(budgetList);
+        listView.setCellFactory(listView -> new BudgetListViewCell());
 
     }
 
