@@ -1,5 +1,7 @@
 package seedu.address.ui;
 
+import java.time.format.DateTimeFormatter;
+
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,14 +11,13 @@ import javafx.scene.layout.Region;
 import seedu.address.model.budget.Budget;
 import seedu.address.model.expense.Expense;
 
-import java.time.format.DateTimeFormatter;
-
 /**
  * An UI component that displays information of a {@code Budget}.
  */
 public class BudgetCard extends UiPart<Region> {
 
     private static final String FXML = "BudgetCard.fxml";
+    private static final String CURRENCY_SYMBOL = "$";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -43,95 +44,73 @@ public class BudgetCard extends UiPart<Region> {
 
     private Budget budget;
 
-    private static final String CURRENCY_SYMBOL = "$";
-
     public BudgetCard(Budget budget) {
         super(FXML);
 
         this.budget = budget;
 
         // budget name
-        budgetName.setText(budget.getDescription().fullDescription);
-
+        updateBudgetCardDescription();
         // budget period
-        budgetStart.setText(budget.getStartDate().format(DateTimeFormatter.BASIC_ISO_DATE));
-        budgetEnd.setText(budget.getEndDate().format(DateTimeFormatter.BASIC_ISO_DATE));
-
+        updateBudgetCardPeriod();
         // budget total over allocated
-        double total = 0.0;
-        for (Expense e : budget.getExpenses()) {
-            total += e.getPrice().getAsDouble();
-        }
-        budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
-        double allocated = Double.parseDouble(budget.getAmount().toString());
-        budgetAllocatedAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,allocated));
-
-        // progress bar
-        budgetProgressBar.setProgress(total/allocated);
+        updateBudgetCardProgressBarText();
         // progress bar colour
-        if(budget.isExceeded()) {
-            budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-overbudget;");
-        } else {
-            budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-inbudget;");
-        }
+        updateBudgetCardProgressBarColour();
 
         budget.getExpenses().addListener(new ListChangeListener<Expense>() {
             @Override
             public void onChanged(Change<? extends Expense> change) {
                 change.next();
-                if (change.wasAdded()) {
+                if (change.wasAdded() || change.wasRemoved() || change.wasReplaced() || change.wasUpdated()) {
                     // update total
-                    System.out.println("expense added");
-                    double total = 0.0;
-                    for (Expense e : budget.getExpenses()) {
-                        total += e.getPrice().getAsDouble();
-                    }
-                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
-                    budgetProgressBar.setProgress(total/allocated);
-
+                    updateBudgetCardProgressBarText();
+                    updateBudgetCardProgressBarColour();
                 }
-                if (change.wasRemoved()) {
-                    // update total
-                    System.out.println("expense deleted");
-                    double total = 0.0;
-                    for (Expense e : budget.getExpenses()) {
-                        total += e.getPrice().getAsDouble();
-                    }
-                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
-                    budgetProgressBar.setProgress(total/allocated);
-
-                }
-                if (change.wasUpdated()) {
-                    // update total
-                    System.out.println("expense updated");
-                    double total = 0.0;
-                    for (Expense e : budget.getExpenses()) {
-                        total += e.getPrice().getAsDouble();
-                    }
-                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
-                    budgetProgressBar.setProgress(total/allocated);
-
-                }
-                if (change.wasReplaced()) {
-                    // update total
-                    System.out.println("expense replaced");
-                    double total = 0.0;
-                    for (Expense e : budget.getExpenses()) {
-                        total += e.getPrice().getAsDouble();
-                    }
-                    budgetTotalAmount.setText(String.format("%s%f",CURRENCY_SYMBOL,total));
-                    budgetProgressBar.setProgress(total/allocated);
-                }
-
-                if(budget.isExceeded()) {
-                    budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-overbudget;");
-                } else {
-                    budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-inbudget;");
-                }
-
             }
         });
 
+    }
+
+    /**
+     * Updates the text displayed on the budget progress bar.
+     */
+    private void updateBudgetCardProgressBarText() {
+        budget.getExpenses()
+                .stream()
+                .mapToDouble(expense -> expense.getPrice().getAsDouble())
+                .reduce((v, v1) -> v + v1)
+                .ifPresentOrElse(this::updateBudgetCardTotalAmounts, () -> updateBudgetCardTotalAmounts(0));
+        budgetAllocatedAmount.setText(String.format("%s%f", CURRENCY_SYMBOL, budget.getAmount().getAsDouble()));
+    }
+
+
+    private void updateBudgetCardTotalAmounts(double totalAmount) {
+        budgetTotalAmount.setText(String.format("%s%f", CURRENCY_SYMBOL, totalAmount));
+        budgetProgressBar.setProgress(totalAmount / budget.getAmount().getAsDouble());
+    }
+
+    private void updateBudgetCardPeriod() {
+        budgetStart.setText(budget.getStartDate().format(DateTimeFormatter.BASIC_ISO_DATE));
+        budgetEnd.setText(budget.getEndDate().format(DateTimeFormatter.BASIC_ISO_DATE));
+    }
+
+    private void updateBudgetCardDescription() {
+        budgetName.setText(budget.getDescription().fullDescription);
+    }
+
+    /**
+     * Sets the progress bar colour to the colour defined in the stylesheet {@code -progress-bar-colour}.
+     * If the budget total amount exceeds the budget allocated amount, the progress bar colour is set to
+     * {@code -progress-bar-overbudget}, else it is set to {@code -progress-bar-inbudget}, as defined in the
+     * stylesheet.
+     */
+    private void updateBudgetCardProgressBarColour() {
+        if (budget.isExceeded()) {
+            budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-overbudget;");
+        } else {
+            budgetProgressBar.setStyle("-progress-bar-colour: -progress-bar-inbudget;");
+        }
     }
 
     @Override

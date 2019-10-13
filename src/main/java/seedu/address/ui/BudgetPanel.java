@@ -1,16 +1,13 @@
 package seedu.address.ui;
 
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
-import seedu.address.model.expense.Expense;
-
-import java.util.logging.Logger;
 
 /**
  * Panel containing the list of expenses.
