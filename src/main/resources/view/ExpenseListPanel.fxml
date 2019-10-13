@@ -2,5 +2,4 @@
 
 <?import javafx.scene.control.ListView?>
 
-
-<ListView fx:id="expenseListView" minWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" />
+<ListView fx:id="expenseListView" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"/>
