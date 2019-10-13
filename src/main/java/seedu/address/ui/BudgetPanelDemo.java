@@ -4,7 +4,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seedu.address.model.budget.Budget;
 import seedu.address.model.expense.Description;
@@ -34,9 +40,14 @@ public class BudgetPanelDemo extends Application {
 
         BudgetPanel budgetPanel = new BudgetPanel(budget1);
 
+        budgetPanel.getRoot().setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
         vBox.getChildren().addAll(budgetPanel.getRoot(), buttonBar);
 
-        stage.setScene(new Scene(vBox));
+
+        Scene scene = new Scene(vBox);
+        stage.setScene(scene);
+
         stage.show();
 
         button1.setOnMouseClicked(event -> {

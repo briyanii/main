@@ -4,7 +4,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 
+<?import java.net.URL?>
 <BorderPane fx:id="budgetPanel" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@DarkTheme.css" />
+        <URL value="@Extensions.css" />
+    </stylesheets>
    <top>
       <StackPane fx:id="budgetCardPlaceholder" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </top>
