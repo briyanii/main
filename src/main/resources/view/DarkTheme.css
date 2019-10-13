@@ -13,8 +13,8 @@
     -font-lightweight: "Segoe UI Light";
     -font-dark: black;
     -font-semibold: "Segoe UI Semibold";
-    -progress-bar-overbudget: -moneyout;
-    -progress-bar-inbudget: #3219cc
+    -progress-bar-overbudget: #ac4e47;
+    -progress-bar-inbudget: #77accc
 }
 
 .text-field {
@@ -126,14 +126,9 @@
     -fx-fill: transparent;
 }
 
-.page-name {
+#budgetCardPane {
     -fx-background-color: -green1;
-    -fx-background-radius: 0 0 10 10;
     -fx-padding: 10;
-}
-
-.progress-bar {
-    -fx-background-color: white;
 }
 
 .progress-bar > .track {
@@ -142,17 +137,18 @@
 
 .progress-bar .bar {
     -fx-background-color: -progress-bar-colour;
+    -fx-background-insets: 0;
 }
 
 .command-box {
     -fx-background-color: -green1;
 }
 
-#cardPane {
+#expenseCardPane {
     -fx-background-color: #e6e6e6;
     -fx-background-radius: 10;
     -fx-border-width: 0;
-    -fx-effect: dropshadow( gaussian, rgba(211, 211, 211, 0.57), 10 , .01, 1 , 5 )
+    -fx-effect: dropshadow(gaussian, rgba(211, 211, 211, 0.57), 10, .01, 1, 5)
 }
 
 
