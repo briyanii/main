@@ -1,7 +1,6 @@
 package seedu.address.ui;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -50,6 +49,7 @@ public class ExpenseCard extends UiPart<Region> {
         price.setText("$" + expense.getPrice().value);
         categories.getChildren().add(new Label(expense.getCategory().getCategoryName()));
         date.setText(expense.getTimestamp().timestamp.format(DateTimeFormatter.ISO_DATE));
+        time.setText(null);
     }
 
     @Override

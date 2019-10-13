@@ -52,18 +52,18 @@
                  </StackPane>
          
                        <StackPane fx:id="statusbarPlaceholder" styleClass="pane-with-border" VBox.vgrow="NEVER" />
-                     <ButtonBar fx:id="windowSelectionBar" prefHeight="40.0" prefWidth="200.0">
+                     <ButtonBar prefHeight="40.0" prefWidth="200.0">
                        <buttons>
-                         <Button fx:id="budgetListButton" mnemonicParsing="false" onAction="#viewBudgetListPanel" text="budget list" />
-                           <Button fx:id="primaryBudgetButton" mnemonicParsing="false" onAction="#viewBudgetPanel" text="primary budget" />
-                           <Button fx:id="expenseListButton" mnemonicParsing="false" onAction="#viewExpenseListPanel" text="all expenses" />
+                         <Button mnemonicParsing="false" onAction="#viewBudgetListPanel" text="Button" />
+                           <Button mnemonicParsing="false" onAction="#viewExpenseListPanel" text="Button" />
+                           <Button mnemonicParsing="false" onAction="#viewBudgetPanel" text="Button" />
                        </buttons>
                      </ButtonBar>
                   </children>
                </VBox>
             </bottom>
             <center>
-          <StackPane fx:id="panelPlaceholder" BorderPane.alignment="CENTER" />
+          <StackPane fx:id="panelPlaceholder" styleClass="placeholder" BorderPane.alignment="CENTER" />
             </center>
          </BorderPane>
     </Scene>

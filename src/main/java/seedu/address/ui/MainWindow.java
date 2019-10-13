@@ -84,7 +84,6 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
-
     }
 
     public Stage getPrimaryStage() {
@@ -129,7 +128,7 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        expenseListPanel = new ExpenseListPanel(logic.getFilteredExpenseList());
+        expenseListPanel = new ExpenseListPanel(logic.getFilteredExpenseList(), true);
         budgetListPanel = new BudgetListPanel(logic.getFilteredBudgetList());
         budgetPanel = null;
         panelPlaceholder.getChildren().add(expenseListPanel.getRoot());
