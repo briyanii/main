@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -42,7 +43,8 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private ExpenseListPanel expenseListPanel;
-    //private BudgetListPanel budgetListPanel;
+    private BudgetListPanel budgetListPanel;
+    private BudgetPanel budgetPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -53,13 +55,16 @@ public class MainWindow extends UiPart<Stage> {
     private MenuItem helpMenuItem;
 
     @FXML
-    private StackPane expenseListPanelPlaceholder;
+    private StackPane panelPlaceholder;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    @FXML
+    private ButtonBar windowSelectionBar;
 
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
@@ -120,7 +125,8 @@ public class MainWindow extends UiPart<Stage> {
      */
     void fillInnerParts() {
         expenseListPanel = new ExpenseListPanel(logic.getFilteredExpenseList());
-        expenseListPanelPlaceholder.getChildren().add(expenseListPanel.getRoot());
+        budgetListPanel = new BudgetListPanel(logic.getFilteredBudgetList());
+        panelPlaceholder.getChildren().add(expenseListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -198,6 +204,26 @@ public class MainWindow extends UiPart<Stage> {
         helpWindow.hide();
         primaryStage.hide();
     }
+
+    @FXML
+    private void viewBudgetPanel() {
+        if (logic.getPrimaryBudget() == null) {
+            return;
+        }
+        budgetPanel = new BudgetPanel(logic.getPrimaryBudget());
+        panelPlaceholder.getChildren().set(0, budgetPanel.getRoot());
+    }
+
+    @FXML
+    private void viewExpenseListPanel() {
+        panelPlaceholder.getChildren().set(0, expenseListPanel.getRoot());
+    }
+
+    @FXML
+    private void viewBudgetListPanel() {
+        panelPlaceholder.getChildren().set(0, budgetListPanel.getRoot());
+    }
+
 
     public ExpenseListPanel getExpenseListPanel() {
         return expenseListPanel;
