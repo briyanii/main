@@ -28,7 +28,7 @@ public class ExpenseCard extends UiPart<Region> {
     public final Expense expense;
 
     @FXML
-    private AnchorPane cardPane;
+    private AnchorPane expenseCardPane;
     @FXML
     private Label description;
     @FXML

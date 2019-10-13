@@ -11,7 +11,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
 
 /**
- * Panel containing the list of expenses.
+ * Panel containing the list of budgets.
  */
 public class BudgetListPanel extends UiPart<Region> {
     private static final String FXML = "BudgetListPanel.fxml";
@@ -29,7 +29,7 @@ public class BudgetListPanel extends UiPart<Region> {
     }
 
     /**
-     * Custom {@code ListCell} that displays the graphics of a {@code Expense} using a {@code ExpenseCard}.
+     * Custom {@code ListCell} that displays the graphics of a {@code Budget} using a {@code BudgetCard}.
      */
     class BudgetListViewCell extends ListCell<Budget> {
         @Override
