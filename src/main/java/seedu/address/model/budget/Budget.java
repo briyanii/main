@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.expense.Description;
 import seedu.address.model.expense.Expense;
@@ -35,7 +38,7 @@ public class Budget {
     private Timestamp startDate;
     private Timestamp endDate;
     private final Period period;
-    private final List<Expense> expenses;
+    private final ObservableList<Expense> expenses;
     private boolean isPrimary;
     private Percentage proportionUsed;
 
@@ -47,13 +50,14 @@ public class Budget {
         this.startDate = startDate;
         this.period = period;
         this.endDate = startDate.plus(period);
-        this.expenses = new ArrayList<>();
+        this.expenses = FXCollections.observableArrayList();
         this.isPrimary = false;
         this.proportionUsed = new Percentage(0);
     }
 
+    public Budget(Description description, Price amount, Timestamp startDate,
+                  Period period, ObservableList<Expense> expenses) {
     //Constructor for system.
-    public Budget(Description description, Price amount, Timestamp startDate, Period period, List<Expense> expenses) {
         requireAllNonNull(description, amount, startDate, period, expenses);
         this.description = description;
         this.amount = amount;
@@ -67,7 +71,7 @@ public class Budget {
 
     //Constructor for system.
     public Budget(Description description, Price amount, Timestamp startDate, Timestamp endDate, Period period,
-                  List<Expense> expenses, boolean isPrimary, Percentage proportionUsed) {
+                  ObservableList<Expense> expenses, boolean isPrimary, Percentage proportionUsed) {
         requireAllNonNull(description, amount, startDate, endDate, period, expenses, isPrimary, proportionUsed);
         this.description = description;
         this.amount = amount;
@@ -99,7 +103,7 @@ public class Budget {
         return amount;
     }
 
-    public List<Expense> getExpenses() {
+    public ObservableList<Expense> getExpenses() {
         return expenses;
     }
 
