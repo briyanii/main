@@ -71,7 +71,7 @@
 }
 
 .status-bar-with-border .label {
-    -fx-text-fill: -status-text-colour;
+    -fx-text-fill: -text-colour1;
 }
 
 .context-menu {

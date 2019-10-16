@@ -358,6 +358,23 @@ public class ModelManager implements Model {
         filteredEvents.setPredicate(predicate);
     }
 
+    //=========== Filtered Budget List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Expense} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Budget> getFilteredBudgetList() {
+        return filteredBudgets;
+    }
+
+    @Override
+    public void updateFilteredBudgetList(Predicate<Budget> predicate) {
+        requireNonNull(predicate);
+        filteredBudgets.setPredicate(predicate);
+    }
+
     @Override
     public boolean equals(Object obj) {
         // short circuit if same object
