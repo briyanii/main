@@ -36,7 +36,7 @@ public class CommandBox extends UiPart<Region> {
         commandSyntaxHighlightingTextArea.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
         commandInputAreaPlaceholder.getChildren().add(commandSyntaxHighlightingTextArea);
 
-        commandSyntaxHighlightingTextArea.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+        commandSyntaxHighlightingTextArea.textArea.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 handleCommandEntered();
             }
