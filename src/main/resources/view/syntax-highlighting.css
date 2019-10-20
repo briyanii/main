@@ -1,7 +1,6 @@
 #SyntaxBox {
     -fx-font-size: 20px;
     -fx-font-family: Monospaced;
-    -fx-background-color: red;
 }
 
 #SyntaxBox .text-area {
@@ -11,7 +10,6 @@
 #SyntaxBox .text-area .scroll-pane {
     -fx-vbar-policy: Never;
     -fx-hbar-policy: Never;
-    -fx-pannable: False;
 }
 
 #SyntaxBox .text-area .scroll-pane .content {
