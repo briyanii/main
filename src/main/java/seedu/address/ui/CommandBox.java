@@ -22,7 +22,7 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
-    private final SyntaxHighlightTextArea syntaxHighlightTextArea;
+    private final CommandSyntaxHighlightingTextArea commandSyntaxHighlightingTextArea;
 
 
     @FXML
@@ -32,11 +32,11 @@ public class CommandBox extends UiPart<Region> {
         super(FXML);
         this.commandExecutor = commandExecutor;
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
-        syntaxHighlightTextArea = new SyntaxHighlightTextArea();
-        syntaxHighlightTextArea.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
-        commandInputAreaPlaceholder.getChildren().add(syntaxHighlightTextArea);
+        commandSyntaxHighlightingTextArea = new CommandSyntaxHighlightingTextArea();
+        commandSyntaxHighlightingTextArea.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+        commandInputAreaPlaceholder.getChildren().add(commandSyntaxHighlightingTextArea);
 
-        syntaxHighlightTextArea.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+        commandSyntaxHighlightingTextArea.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 handleCommandEntered();
             }
@@ -44,7 +44,7 @@ public class CommandBox extends UiPart<Region> {
     }
 
     public void importSyntaxStyleSheet(Scene scene) {
-        syntaxHighlightTextArea.importStyleSheet(scene);
+        commandSyntaxHighlightingTextArea.importStyleSheet(scene);
     }
 
     /**
@@ -52,8 +52,8 @@ public class CommandBox extends UiPart<Region> {
      */
     private void handleCommandEntered() {
         try {
-            commandExecutor.execute(syntaxHighlightTextArea.getText());
-            syntaxHighlightTextArea.clear();
+            commandExecutor.execute(commandSyntaxHighlightingTextArea.getText());
+            commandSyntaxHighlightingTextArea.clear();
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
@@ -64,7 +64,7 @@ public class CommandBox extends UiPart<Region> {
      */
     private void setStyleToDefault() {
         // enable syntax highlighting
-        syntaxHighlightTextArea.enableSyntaxHighlighting();
+        commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
     }
 
     /**
@@ -72,7 +72,7 @@ public class CommandBox extends UiPart<Region> {
      */
     private void setStyleToIndicateCommandFailure() {
         //override style and disable syntax highlighting
-        syntaxHighlightTextArea.overrideStyle(ERROR_STYLE_CLASS);
+        commandSyntaxHighlightingTextArea.overrideStyle(ERROR_STYLE_CLASS);
     }
 
     /**
@@ -82,7 +82,7 @@ public class CommandBox extends UiPart<Region> {
      * @param syntax The minimum syntax required
      */
     public void enableSyntaxHightlightingForCommand(String com, List<Prefix> pre, String syntax) {
-        syntaxHighlightTextArea.createPattern(com, pre, syntax);
+        commandSyntaxHighlightingTextArea.createPattern(com, pre, syntax);
     }
 
     /**
@@ -90,11 +90,11 @@ public class CommandBox extends UiPart<Region> {
      * @param command The command word of the command.
      */
     public void disableSyntaxHighlightingForCommand(String command) {
-        syntaxHighlightTextArea.removePattern(command);
+        commandSyntaxHighlightingTextArea.removePattern(command);
     }
 
     public void enableSyntaxHighlighting() {
-        syntaxHighlightTextArea.enableSyntaxHighlighting();
+        commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
     }
 
 

@@ -16,18 +16,13 @@ public class SyntaxTextDemo extends Application {
      * Stub.
      */
     public void start(Stage stage) {
-        SyntaxHighlightTextArea syntaxHighlightTextArea = new SyntaxHighlightTextArea();
+        CommandSyntaxHighlightingTextArea commandSyntaxHighlightingTextArea = new CommandSyntaxHighlightingTextArea();
 
-        Scene scene = new Scene(syntaxHighlightTextArea);
-        syntaxHighlightTextArea.importStyleSheet(scene);
-        syntaxHighlightTextArea.createPattern("add", List.of(new Prefix("d/"), new Prefix("p/")), "add d/ <description> p/ <price>");
-        syntaxHighlightTextArea.enableSyntaxHighlighting();
-
+        Scene scene = new Scene(commandSyntaxHighlightingTextArea);
+        commandSyntaxHighlightingTextArea.importStyleSheet(scene);
+        commandSyntaxHighlightingTextArea.createPattern("add", List.of(new Prefix("d/"), new Prefix("p/")), "add d/ <type here to replace placeholder> p/ <placeholder>");
+        commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
         stage.setScene(scene);
         stage.show();
-
     }
-
-
-
 }
