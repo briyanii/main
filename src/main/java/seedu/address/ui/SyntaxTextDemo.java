@@ -23,6 +23,11 @@ public class SyntaxTextDemo extends Application {
         commandSyntaxHighlightingTextArea.createPattern("add", List.of(new Prefix("d/"), new Prefix("p/")), "add d/ <type here to replace placeholder> p/ <placeholder>");
         commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
         stage.setScene(scene);
+        scene.widthProperty().addListener((observableValue, number, t1) -> {
+            commandSyntaxHighlightingTextArea.setPrefWidth(t1.doubleValue());
+            commandSyntaxHighlightingTextArea.setMaxWidth(t1.doubleValue());
+            commandSyntaxHighlightingTextArea.setMinWidth(t1.doubleValue());
+        });
         stage.show();
 
     }

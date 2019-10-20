@@ -11,6 +11,7 @@ import static javafx.scene.input.KeyCode.KP_LEFT;
 import static javafx.scene.input.KeyCode.KP_RIGHT;
 import static javafx.scene.input.KeyCode.KP_UP;
 import static javafx.scene.input.KeyCode.LEFT;
+import static javafx.scene.input.KeyCode.P;
 import static javafx.scene.input.KeyCode.RIGHT;
 import static javafx.scene.input.KeyCode.UP;
 import static javafx.scene.input.KeyCode.V;
@@ -35,8 +36,6 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.plaf.ComponentInputMapUIResource;
-
 import org.fxmisc.richtext.Caret;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -48,18 +47,18 @@ import org.reactfx.Subscription;
 
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.logic.parser.Prefix;
@@ -68,9 +67,9 @@ import seedu.address.logic.parser.Prefix;
  * A single line text area utilising RichTextFX to support syntax highlighting of user input.
  * This has some code which is adapted from OverrideBehaviorDemo and JavaKeywordsDemo in RichTextFX.
  */
-public class CommandSyntaxHighlightingTextArea extends Region {
+public class CommandSyntaxHighlightingTextArea extends StackPane {
 
-    public final TextArea textArea;
+    public  TextArea textArea;
     private StyleClassedTextArea styleClassedTextArea;
 
     private Map<String, Pattern> stringPatternMap;
@@ -167,11 +166,13 @@ public class CommandSyntaxHighlightingTextArea extends Region {
         textArea = new TextArea();
         // textformatter which handles syntax/placeholder insertion and replacement of placeholder
         textArea.setTextFormatter(new TextFormatter<String>(this::autofillAndPlaceholderReplacement));
-        textArea.setOpacity(0);
+        //textArea.setOpacity(0);
+        textArea.setBackground(Background.EMPTY);
 
         //------------ visible text area ---------------
         // richtextfx element to underlay text area for syntax highlighting
         styleClassedTextArea = new StyleClassedTextArea();
+        styleClassedTextArea.setId("styled");
         styleClassedTextArea.setDisable(true);
         styleClassedTextArea.setShowCaret(Caret.CaretVisibility.ON);
 
@@ -191,9 +192,7 @@ public class CommandSyntaxHighlightingTextArea extends Region {
         });
 
         // to overlay elements
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(styleClassedTextArea, textArea);
-        getChildren().add(stackPane);
+        getChildren().addAll(styleClassedTextArea, textArea);
 
         //------------ for alignment of actual and visible text area ---------------
 
@@ -222,20 +221,18 @@ public class CommandSyntaxHighlightingTextArea extends Region {
         });
 
         widthProperty().addListener((observableValue, number, t1) -> {
-            double width = t1.doubleValue();
-            textArea.setMinWidth(width);
-            textArea.setPrefWidth(width);
+            textArea.setPrefWidth(t1.doubleValue());
+            textArea.setMinWidth(t1.doubleValue());
+            textArea.setMaxWidth(t1.doubleValue());
 
-            styleClassedTextArea.setPrefWidth(width);
-            styleClassedTextArea.setMinWidth(width);
-
-            stackPane.setPrefWidth(width);
-            stackPane.setMinWidth(width);
-
-            setPrefWidth(width);
-            setMinWidth(width);
-
+            styleClassedTextArea.setPrefWidth(t1.doubleValue());
+            styleClassedTextArea.setMinWidth(t1.doubleValue());
+            styleClassedTextArea.setMaxWidth(t1.doubleValue());
         });
+
+
+
+
 
         Nodes.addInputMap(textArea, consumeMassSelectionEvent);
         Nodes.addInputMap(textArea, consumeContextMenuRequestEvent);
@@ -280,8 +277,10 @@ public class CommandSyntaxHighlightingTextArea extends Region {
 
     private void mirrorViewportMovement(StyleClassedTextArea visibleTextArea, KeyEvent keyEvent) {
         // mirrors navigation
+        System.out.println(keyEvent.getCode());
         if (keyEvent.getCode().isNavigationKey()) {
             visibleTextArea.fireEvent(keyEvent);
+            System.out.println(keyEvent.getCode());
 
             // mirrors view port shifting right on character input
         } else if (addsCharacterToTextArea.test(keyEvent)) {
@@ -471,6 +470,8 @@ public class CommandSyntaxHighlightingTextArea extends Region {
             if (change.getText().equals("<") || change.getText().equals(">")) {
                 return null;
             }
+
+            change.setText(change.getText().replaceAll("[\\n\\r]+", ""));
 
             String commandWordRegex = String.join("|", stringPatternMap.keySet());
 
