@@ -1,16 +1,30 @@
 package seedu.address.ui;
 
-import static javafx.scene.input.KeyCode.BACK_SPACE;
+import static javafx.scene.input.KeyCode.A;
+import static javafx.scene.input.KeyCode.BACK_SLASH;
 import static javafx.scene.input.KeyCode.C;
+import static javafx.scene.input.KeyCode.DOWN;
 import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.K;
+import static javafx.scene.input.KeyCode.KP_DOWN;
+import static javafx.scene.input.KeyCode.KP_LEFT;
+import static javafx.scene.input.KeyCode.KP_RIGHT;
+import static javafx.scene.input.KeyCode.KP_UP;
+import static javafx.scene.input.KeyCode.LEFT;
+import static javafx.scene.input.KeyCode.RIGHT;
+import static javafx.scene.input.KeyCode.UP;
 import static javafx.scene.input.KeyCode.V;
 import static javafx.scene.input.KeyCode.X;
 import static javafx.scene.input.KeyCode.Y;
 import static javafx.scene.input.KeyCombination.SHIFT_ANY;
+import static javafx.scene.input.KeyCombination.SHIFT_DOWN;
 import static javafx.scene.input.KeyCombination.SHORTCUT_ANY;
 import static javafx.scene.input.KeyCombination.SHORTCUT_DOWN;
+import static javafx.scene.input.KeyCombination.keyCombination;
+import static org.fxmisc.wellbehaved.event.EventPattern.ALL_MODIFIERS_AS_ANY;
 import static org.fxmisc.wellbehaved.event.EventPattern.eventType;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
+import static org.fxmisc.wellbehaved.event.EventPattern.keyTyped;
 import static org.fxmisc.wellbehaved.event.EventPattern.mousePressed;
 
 import java.time.Duration;
@@ -22,6 +36,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fxmisc.richtext.Caret;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -30,22 +45,42 @@ import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.Subscription;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import seedu.address.logic.parser.Prefix;
 
 /**
  * A single line text area utilising RichTextFX to support syntax highlighting of user input.
  * This code is adapted from OverrideBehaviorDemo and JavaKeywordsDemo in RichTextFX.
  */
-public class SyntaxHighlightTextArea extends StyleClassedTextArea {
+public class SyntaxHighlightTextArea extends StackPane {
 
     // temporary static patterns before proper integration
+
+    private TextArea textField;
+
+    private StyleClassedTextArea styleClassedTextArea;
+
+    private StackPane stackPane;
+
     private static final String INPUT_PATTERN_TEMPLATE = "((?<preamble>^\\s*)(?<COMMAND>%s))|%s(?<arg>\\S+)";
 
     private Map<String, Pattern> stringPatternMap;
@@ -67,6 +102,20 @@ public class SyntaxHighlightTextArea extends StyleClassedTextArea {
     public SyntaxHighlightTextArea() {
         super();
 
+        // actual text field with text formatter
+        TextArea a = new TextArea();
+        textField = new TextArea();
+        textField.setTextFormatter(new TextFormatter<String>(this::temp));
+
+        // richtextfx element to underlay text field
+        styleClassedTextArea = new StyleClassedTextArea();
+        // stackpane to overlay textfield over richtextfx element
+
+        getChildren().addAll(styleClassedTextArea, textField);
+
+
+
+
         stringPatternMap = new HashMap<>();
         stringIntMap = new HashMap<>();
         stringAutofillMap = new HashMap<>();
@@ -76,61 +125,121 @@ public class SyntaxHighlightTextArea extends StyleClassedTextArea {
                 // enter
                 keyPressed(ENTER, SHIFT_ANY, SHORTCUT_ANY),
                 // disable paste cut copy
+                keyPressed(LEFT, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(KP_LEFT, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(RIGHT, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(KP_RIGHT, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(DOWN, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(KP_DOWN, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(UP, SHIFT_DOWN, SHORTCUT_ANY),
+                keyPressed(KP_UP, SHIFT_DOWN, SHORTCUT_ANY),
                 keyPressed(C, SHIFT_ANY, SHORTCUT_DOWN),
                 keyPressed(X, SHIFT_ANY, SHORTCUT_DOWN),
                 keyPressed(V, SHIFT_ANY, SHORTCUT_DOWN),
                 // undo redo
                 keyPressed(Y, SHIFT_ANY, SHORTCUT_DOWN),
                 keyPressed(KeyCode.Z, SHIFT_ANY, SHORTCUT_DOWN),
+
+                // prevent select all
+                keyPressed(A, SHIFT_ANY, SHORTCUT_DOWN),
                 // mouse select
                 eventType(MouseEvent.MOUSE_DRAGGED),
                 eventType(MouseEvent.DRAG_DETECTED),
                 mousePressed().unless(e -> e.getClickCount() == 1 && !e.isShiftDown())
         ));
 
-        disableAutoCompletionOnBackspaceDownHandler = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode().equals(BACK_SPACE)) {
-                    textProperty().removeListener(autoFillAddCompulsoryFieldsListener);
+        // to apply arrow key navigation to styled text area
+
+        textField.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if (!t1) {
+                textField.clear();
+            }
+        });
+
+        textField.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode().isNavigationKey()) {
+                styleClassedTextArea.fireEvent(keyEvent);
+            } else if (keyEvent.getCode().isLetterKey() || keyEvent.getCode().isDigitKey()
+                    || keyEvent.getCode().equals(KeyCode.COLON) || keyEvent.getCode().equals(KeyCode.SEMICOLON)
+                    || keyEvent.getCode().equals(KeyCode.BRACELEFT) || keyEvent.getCode().equals(KeyCode.BRACERIGHT)
+                    || keyEvent.getCode().equals(KeyCode.LEFT_PARENTHESIS) || keyEvent.getCode().equals(KeyCode.RIGHT_PARENTHESIS)
+                    || keyEvent.getCode().equals(KeyCode.CLOSE_BRACKET) || keyEvent.getCode().equals(KeyCode.OPEN_BRACKET)
+                    || keyEvent.getCode().equals(KeyCode.PERIOD) || keyEvent.getCode().equals(KeyCode.COMMA)
+                    || keyEvent.getCode().equals(KeyCode.SLASH) || keyEvent.getCode().equals(BACK_SLASH)
+                    || keyEvent.getCode().equals(KeyCode.QUOTE)|| keyEvent.getCode().equals(KeyCode.BACK_QUOTE)
+                    || keyEvent.getCode().equals(KeyCode.SPACE) || keyEvent.getCode().equals(KeyCode.EQUALS)
+                    || keyEvent.getCode().equals(KeyCode.MINUS)) {
+                if (keyEvent.isShiftDown() || keyEvent.isShortcutDown()) {
+                    return;
                 }
+                KeyEvent press = new KeyEvent(null, styleClassedTextArea, KeyEvent.KEY_PRESSED, "", "", KeyCode.RIGHT, false, false, false, false);
+                styleClassedTextArea.fireEvent(press);
+            } else if (keyEvent.getCode().equals(KeyCode.BACK_SPACE)) {
+                KeyEvent press = new KeyEvent(null, styleClassedTextArea, KeyEvent.KEY_PRESSED, "", "", KeyCode.LEFT, false, false, false, false);
+                styleClassedTextArea.fireEvent(press);
             }
-        };
 
-        enableAutoCompletionOnBackspaceReleasedHandler = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode().equals(BACK_SPACE)) {
-                    textProperty().addListener(autoFillAddCompulsoryFieldsListener);
-                }
+        });
+
+        textField.textProperty().addListener((observableValue, s, t1) -> {
+            styleClassedTextArea.replaceText(t1);
+
+        });
+
+        textField.caretPositionProperty().addListener((observableValue, number, t1) -> {
+            try {
+                styleClassedTextArea.displaceCaret((int) t1);
+            } catch (IndexOutOfBoundsException e) {
+                styleClassedTextArea.displaceCaret(styleClassedTextArea.getLength());
             }
-        };
+        });
 
-        autoFillAddCompulsoryFieldsListener = (obser, s, t1) -> {
-            if (stringAutofillMap.containsKey(t1.trim()) && stringIntMap.get(t1.trim()) > 0) {
-                replaceText(stringAutofillMap.get(t1.trim()));
-            }
-        };
 
-        // temporary sizes
-        double h = 35;
-        setHeight(h);
-        setPrefHeight(h);
-        setMaxHeight(h);
-        setMinHeight(h);
 
-        Nodes.addInputMap(this, consumeKeyPress);
+        prefWidth(-1);
+        textField.prefWidth(-1);
+        styleClassedTextArea.prefWidth(-1);
+
+//         temporary sizes
+        double h = 30;
+        styleClassedTextArea.setPrefHeight(h);
+        styleClassedTextArea.setMaxHeight(h);
+        styleClassedTextArea.setMinHeight(h);
+        styleClassedTextArea.setDisable(true);
+        styleClassedTextArea.setShowCaret(Caret.CaretVisibility.ON);
+//        textField.setStyle("-fx-text-fill: transparent");
+
+
+        textField.setPadding(Insets.EMPTY);
+        textField.setBackground(Background.EMPTY);
+        textField.setOpacity(0);
+
+        Nodes.addInputMap(textField, consumeKeyPress);
+
+        Nodes.addInputMap(styleClassedTextArea, consumeKeyPress);
 
         // listeners for auto completion
-        textProperty().addListener(autoFillAddCompulsoryFieldsListener);
+//        textProperty().addListener(autoFillAddCompulsoryFieldsListener);
 
         // key event handlers
-        //addEventHandler(KeyEvent.KEY_PRESSED, enterKeyPressedHandler);
-        addEventHandler(KeyEvent.KEY_PRESSED, disableAutoCompletionOnBackspaceDownHandler);
-        addEventHandler(KeyEvent.KEY_RELEASED, enableAutoCompletionOnBackspaceReleasedHandler);
+//        //addEventHandler(KeyEvent.KEY_PRESSED, enterKeyPressedHandler);
+//        addEventHandler(KeyEvent.KEY_PRESSED, disableAutoCompletionOnBackspaceDownHandler);
+//        addEventHandler(KeyEvent.KEY_RELEASED, enableAutoCompletionOnBackspaceReleasedHandler);
 
         // when no longer need syntax highlighting and wish to clean up memory leaks
         // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
+    }
+
+    public void clear() {
+        textField.clear();
+    }
+
+    public String getText() {
+        return textField.getText();
+    }
+
+    public StringProperty textProperty() {
+        return textField.textProperty();
     }
 
     /**
@@ -138,10 +247,10 @@ public class SyntaxHighlightTextArea extends StyleClassedTextArea {
      */
     public void enableSyntaxHighlighting() {
         cleanupWhenNoLongerNeedIt =
-                multiPlainChanges()
-                    .successionEnds(Duration.ofMillis(200))
+                styleClassedTextArea.multiPlainChanges()
+                    .successionEnds(Duration.ofMillis(500))
                         .subscribe(ignore -> {
-                            this.setStyleSpans(0, computeHighlighting(this.getText()));
+                            styleClassedTextArea.setStyleSpans(0, computeHighlighting(styleClassedTextArea.getText()));
                         });
     }
 
@@ -151,8 +260,8 @@ public class SyntaxHighlightTextArea extends StyleClassedTextArea {
      */
     public void overrideStyle(String styleClass) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
-        spansBuilder.add(Collections.singleton(styleClass), getLength());
-        setStyleSpans(0, spansBuilder.create());
+        spansBuilder.add(Collections.singleton(styleClass), styleClassedTextArea.getLength());
+        styleClassedTextArea.setStyleSpans(0, spansBuilder.create());
         if (cleanupWhenNoLongerNeedIt != null) {
             cleanupWhenNoLongerNeedIt.unsubscribe();
         }
@@ -300,5 +409,109 @@ public class SyntaxHighlightTextArea extends StyleClassedTextArea {
 
         return spansBuilder.create();
     }
+
+    // text formatter to handle replacing of placeholders
+    private TextFormatter.Change temp(TextFormatter.Change change) {
+        if (change.isContentChange()) {
+
+            String ch = "";
+            if (change.isReplaced()) {
+                ch = "replace";
+            } else if (change.isDeleted()) {
+                ch = "del";
+            } else {
+                ch = "add";
+            }
+
+            String syntax = "add d/ <description> p/ <price>";
+            Pattern syntaxRegex = Pattern.compile("(?<whitespace1>\\s*)(?<commandword>add)(?<whitepspace2>\\s+)" +
+                    "(?<prefix1>d/)(?<description>.*?)(?<whitespace4>\\s+)" +
+                    "(?<prefix2>p/)(?<price>.*)");
+
+            Pattern commandWordRegex = Pattern.compile("(\\s*)add(\\s*)");
+
+            int start = change.getRangeStart();
+            int end = change.getRangeEnd();
+
+            int caret = change.getControlCaretPosition();
+            int anchor = change.getControlAnchor();
+
+
+            //change.setText(change.getText().replaceAll("\\s", "_"));
+
+            String state = "";
+            String description = "";
+            String price = "";
+
+
+            boolean hasNonNullDesc = false;
+            boolean hasNonNullPrice = false;
+
+            if (commandWordRegex.matcher(change.getControlNewText()).matches()) {
+                state = "[found command adding syntax]";
+                change.setRange(0, change.getControlNewText().length()-1);
+                change.setText(syntax);
+            }
+
+            if (syntaxRegex.matcher(change.getControlNewText()).matches()) {
+
+                Matcher m1 = syntaxRegex.matcher(change.getControlNewText());
+                m1.find();
+
+                int groupStart = m1.start("description");
+                int groupEnd = m1.end("description");
+
+                if (change.getCaretPosition() <= groupEnd && change.getCaretPosition() >= groupStart) {
+                    state = "[changing description]";
+                    Matcher m2 = syntaxRegex.matcher(change.getControlText());
+                    if (m2.find() && m2.group("description").trim().equals("<description>")) {
+                        String before = m1.group("commandword") + " " + m1.group("prefix1") + " ";
+                        String input = change.getText();
+                        String after = " " + m1.group("prefix2") + " " + m1.group("price");
+                        if (change.isDeleted()) {
+                            change.setRange(0, change.getControlNewText().length()-1);
+                        } else {
+                            change.setRange(0, change.getControlNewText().length()-1);
+                        }
+                        change.setText(before + input + after);
+                        change.setCaretPosition(before.length() + input.length());
+                        change.setAnchor(before.length() + input.length());
+                    }
+                }
+
+                description = m1.group("description").trim();
+                hasNonNullDesc = !description.trim().isEmpty();
+
+                groupStart = m1.start("price");
+                groupEnd = m1.end("price");
+
+                if ( groupStart <= change.getCaretPosition() && change.getCaretPosition() <= groupEnd) {
+                    state = "[changing price]";
+                    Matcher m2 = syntaxRegex.matcher(change.getControlText());
+                    if (m2.find() && m2.group("price").trim().equals("<price>")) {
+                        String before = m1.group("commandword") + " " + m1.group("prefix1") + " " + m1.group("description") + " " + m1.group("prefix2") + " ";
+                        String input = change.getText();
+                        String after = "";
+                        change.setRange(0, change.getControlNewText().length() - 1);
+                        change.setText(before + input + after);
+                        change.setCaretPosition(before.length() + input.length());
+                        change.setAnchor(before.length() + input.length());
+                    }
+                }
+
+                price = m1.group("price").trim();
+                hasNonNullPrice = !price.trim().isEmpty();
+
+
+
+            }
+
+        }
+
+
+        return change;
+
+    }
+
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seedu.address.logic.parser.Prefix;
 
@@ -17,18 +16,18 @@ public class SyntaxTextDemo extends Application {
      * Stub.
      */
     public void start(Stage stage) {
-        SyntaxHighlightTextArea inlineCssTextArea = new SyntaxHighlightTextArea();
-        inlineCssTextArea.replaceText("");
+        SyntaxHighlightTextArea syntaxHighlightTextArea = new SyntaxHighlightTextArea();
 
-        StackPane s = new StackPane(inlineCssTextArea);
-
-        Scene scene = new Scene(s);
-        inlineCssTextArea.importStyleSheet(scene);
-        inlineCssTextArea.createPattern("hi", List.of(new Prefix("d/")), "hi d/ <a>");
-        inlineCssTextArea.enableSyntaxHighlighting();
+        Scene scene = new Scene(syntaxHighlightTextArea);
+        syntaxHighlightTextArea.importStyleSheet(scene);
+        syntaxHighlightTextArea.createPattern("add", List.of(new Prefix("d/"), new Prefix("p/")), "add d/ <description> p/ <price>");
+        syntaxHighlightTextArea.enableSyntaxHighlighting();
 
         stage.setScene(scene);
         stage.show();
 
     }
+
+
+
 }
