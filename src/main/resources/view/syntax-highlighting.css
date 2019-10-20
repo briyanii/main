@@ -1,7 +1,7 @@
 .command-word {
-    -fx-fill: #00ffe9;
+    -fx-fill: #6a00b1;
     -fx-font-weight: bold;
-    -rtfx-background-color: rgba(172, 78, 71, 0.48);
+    /*-rtfx-background-color: rgba(172, 78, 71, 0.48);*/
 
 }
 
