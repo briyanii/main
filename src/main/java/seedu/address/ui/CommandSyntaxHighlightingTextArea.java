@@ -35,6 +35,8 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.plaf.ComponentInputMapUIResource;
+
 import org.fxmisc.richtext.Caret;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -46,8 +48,12 @@ import org.reactfx.Subscription;
 
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ContextMenuEvent;
@@ -64,7 +70,7 @@ import seedu.address.logic.parser.Prefix;
  */
 public class CommandSyntaxHighlightingTextArea extends Region {
 
-    private TextArea textArea;
+    public final TextArea textArea;
     private StyleClassedTextArea styleClassedTextArea;
 
     private Map<String, Pattern> stringPatternMap;
@@ -128,7 +134,7 @@ public class CommandSyntaxHighlightingTextArea extends Region {
 
     private static InputMap<Event> consumeEnterKeyEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(ENTER, SHIFT_ANY, SHORTCUT_ANY),
-            keyReleased(ENTER, SHIFT_ANY, SHORTCUT_ANY)));;
+            keyReleased(ENTER, SHIFT_ANY, SHORTCUT_ANY)));
 
     private static InputMap<Event> consumeUndoRedoEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(Y, SHIFT_ANY, SHORTCUT_DOWN),
@@ -203,6 +209,8 @@ public class CommandSyntaxHighlightingTextArea extends Region {
             }
         });
 
+
+        // ----- sizing ------
         textArea.fontProperty().addListener((observableValue, font, t1) -> {
             double h = t1.getSize() + 5;
             styleClassedTextArea.setPrefHeight(h);
@@ -211,6 +219,22 @@ public class CommandSyntaxHighlightingTextArea extends Region {
             textArea.setPrefHeight(h);
             textArea.setMaxHeight(h);
             textArea.setMinHeight(h);
+        });
+
+        widthProperty().addListener((observableValue, number, t1) -> {
+            double width = t1.doubleValue();
+            textArea.setMinWidth(width);
+            textArea.setPrefWidth(width);
+
+            styleClassedTextArea.setPrefWidth(width);
+            styleClassedTextArea.setMinWidth(width);
+
+            stackPane.setPrefWidth(width);
+            stackPane.setMinWidth(width);
+
+            setPrefWidth(width);
+            setMinWidth(width);
+
         });
 
         Nodes.addInputMap(textArea, consumeMassSelectionEvent);
@@ -230,6 +254,7 @@ public class CommandSyntaxHighlightingTextArea extends Region {
 
     public void clear() {
         textArea.clear();
+        styleClassedTextArea.clear();
     }
 
     public String getText() {
@@ -475,7 +500,7 @@ public class CommandSyntaxHighlightingTextArea extends Region {
                 Pattern placeHolderPattern = Pattern.compile(PLACE_HOLDER_REGEX);
                 Matcher placeholder = placeHolderPattern.matcher(change.getControlText());
                 // find group until caret lies inside
-                if (placeholder.find()) {
+                while (placeholder.find()) {
                     if (change.getCaretPosition() <= placeholder.end()
                             && change.getCaretPosition() >= placeholder.start()) {
 

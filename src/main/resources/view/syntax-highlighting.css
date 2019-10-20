@@ -1,6 +1,7 @@
 #SyntaxBox {
     -fx-font-size: 20px;
     -fx-font-family: Monospaced;
+    -fx-background-color: red;
 }
 
 #SyntaxBox .text-area {

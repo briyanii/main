@@ -24,5 +24,6 @@ public class SyntaxTextDemo extends Application {
         commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
         stage.setScene(scene);
         stage.show();
+
     }
 }
