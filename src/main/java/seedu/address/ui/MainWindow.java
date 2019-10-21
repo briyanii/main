@@ -278,8 +278,14 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             if (commandResult.isViewRequest()) {
+                // ensure budget panel is updated
+                if (commandResult.viewRequest().equals(BudgetPanel.PANEL_NAME)) {
+                    budgetPanel = new BudgetPanel(logic.getPrimaryBudget());
+                    panelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
+                }
                 changePanel(commandResult.viewRequest());
             }
+
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
