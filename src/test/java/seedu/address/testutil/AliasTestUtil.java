@@ -5,15 +5,15 @@ import static seedu.address.logic.commands.CommandTestUtil.PRICE_DESC_CHICKEN;
 
 import seedu.address.commons.core.Alias;
 import seedu.address.commons.core.AliasMappings;
-import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.AliasCommand;
-import seedu.address.logic.commands.ClearCommand;
-import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.expense.AddCommand;
+import seedu.address.logic.commands.alias.AliasCommand;
+import seedu.address.logic.commands.expense.ClearCommand;
+import seedu.address.logic.commands.expense.DeleteCommand;
+import seedu.address.logic.commands.expense.EditCommand;
+import seedu.address.logic.commands.general.ExitCommand;
+import seedu.address.logic.commands.expense.FindCommand;
+import seedu.address.logic.commands.general.HelpCommand;
+import seedu.address.logic.commands.expense.ListCommand;
 
 /**
  * A utility class representing {@code AliasMappings} objects to be used in tests.

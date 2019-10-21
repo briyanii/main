@@ -1,4 +1,4 @@
-package seedu.address.ui;
+package seedu.address.ui.expense;
 
 import java.util.logging.Logger;
 
@@ -7,16 +7,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.expense.Expense;
+import seedu.address.ui.panel.Panel;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Panel containing the list of expenses.
  */
-public class ExpenseListPanel extends UiPart<Region> {
+public class ExpenseListPanel extends Panel {
     private static final String FXML = "ListPanel.fxml";
+    public static final PanelName PANEL_NAME = new PanelName("Expense List Panel");
+
     private final Logger logger = LogsCenter.getLogger(ExpenseListPanel.class);
 
     @FXML
@@ -34,6 +37,23 @@ public class ExpenseListPanel extends UiPart<Region> {
         listView.setItems(expenseList);
         listView.setCellFactory(listView -> new ExpenseListViewCell());
 
+    }
+
+    @Override
+    public int hashCode() {
+        return PANEL_NAME.hashCode();
+    }
+
+    @Override
+    public void view() {
+        getRoot().setVisible(true);
+        getRoot().setDisable(false);
+    }
+
+    @Override
+    public void hide() {
+        getRoot().setVisible(false);
+        getRoot().setDisable(true);
     }
 
     /**

@@ -1,8 +1,10 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.alias;
 
 import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.Alias;
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
@@ -59,7 +61,8 @@ public class AliasCommand extends UndoableCommand {
         requireNonNull(model);
 
         model.addUserAlias(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getAliasName()));
+        return new CommandResult(
+                String.format(MESSAGE_SUCCESS, toAdd.getAliasName()));
     }
 
     @Override

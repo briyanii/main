@@ -1,9 +1,13 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.expense;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_EXPENSES;
 
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.model.Model;
+import seedu.address.ui.expense.ExpenseListPanel;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Lists all expenses in the address book to the user.
@@ -23,6 +27,6 @@ public class ListCommand extends UndoableCommand {
     protected CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredExpenseList(PREDICATE_SHOW_ALL_EXPENSES);
-        return new CommandResult(MESSAGE_SUCCESS);
+        return new CommandResult(MESSAGE_SUCCESS, ExpenseListPanel.PANEL_NAME);
     }
 }

@@ -1,4 +1,4 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.statistics;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
@@ -6,8 +6,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 
 import java.util.Objects;
 
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.model.Model;
 import seedu.address.model.expense.Timestamp;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Calculates statistics for Moolah
@@ -52,7 +55,7 @@ public class StatsCommand extends Command {
         String statsResult = model.calculateStatistics(COMMAND_WORD, startDate, endDate, null);
         //modifies model to store the statistic in its field
 
-        return new CommandResult(statsResult, false, false, true);
+        return new CommandResult(statsResult, false, false, true, false, PanelName.CURRENT);
     }
 
     @Override
