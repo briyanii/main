@@ -11,6 +11,7 @@ import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.budget.Budget;
+import seedu.address.ui.budget.BudgetPanel;
 
 /**
  * Adds a budget to Moolah.
@@ -55,7 +56,7 @@ public class AddBudgetCommand extends UndoableCommand {
 
         model.addBudget(toAdd);
         model.setPrimary(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd), BudgetPanel.PANEL_NAME);
     }
 
     @Override
