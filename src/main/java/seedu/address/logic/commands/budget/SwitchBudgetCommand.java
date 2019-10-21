@@ -8,6 +8,7 @@ import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.expense.Description;
+import seedu.address.ui.budget.BudgetPanel;
 
 /**
  * Switches the primary budget to another budget.
@@ -51,7 +52,7 @@ public class SwitchBudgetCommand extends UndoableCommand {
         requireNonNull(model);
 
         model.switchBudgetTo(targetDescription);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, targetDescription));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, targetDescription), BudgetPanel.PANEL_NAME);
     }
 
     @Override
