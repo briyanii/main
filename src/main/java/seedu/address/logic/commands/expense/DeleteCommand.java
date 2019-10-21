@@ -1,4 +1,4 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.expense;
 
 import static java.util.Objects.requireNonNull;
 
@@ -6,9 +6,13 @@ import java.util.List;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.expense.Expense;
+import seedu.address.ui.expense.ExpenseListPanel;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Deletes a expense identified using it's displayed index from the address book.
@@ -47,7 +51,7 @@ public class DeleteCommand extends UndoableCommand {
 
         Expense expenseToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deleteExpense(expenseToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_EXPENSE_SUCCESS, expenseToDelete));
+        return new CommandResult(String.format(MESSAGE_DELETE_EXPENSE_SUCCESS, expenseToDelete), ExpenseListPanel.PANEL_NAME);
     }
 
     @Override

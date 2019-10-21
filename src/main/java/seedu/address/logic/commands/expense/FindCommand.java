@@ -1,10 +1,14 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.expense;
 
 import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.Messages;
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.model.Model;
 import seedu.address.model.expense.DescriptionContainsKeywordsPredicate;
+import seedu.address.ui.expense.ExpenseListPanel;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Finds and lists all expenses in address book whose description contains any of the argument keywords.
@@ -35,7 +39,7 @@ public class FindCommand extends UndoableCommand {
         requireNonNull(model);
         model.updateFilteredExpenseList(predicate);
         return new CommandResult(
-                String.format(Messages.MESSAGE_EXPENSES_LISTED_OVERVIEW, model.getFilteredExpenseList().size()));
+                String.format(Messages.MESSAGE_EXPENSES_LISTED_OVERVIEW, model.getFilteredExpenseList().size()), ExpenseListPanel.PANEL_NAME);
     }
 
     @Override

@@ -1,9 +1,12 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.expense;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.ui.expense.ExpenseListPanel;
 
 /**
  * Clears the address book.
@@ -22,6 +25,6 @@ public class ClearCommand extends UndoableCommand {
     protected CommandResult execute(Model model) {
         requireNonNull(model);
         model.setAddressBook(new AddressBook());
-        return new CommandResult(MESSAGE_SUCCESS);
+        return new CommandResult(MESSAGE_SUCCESS, ExpenseListPanel.PANEL_NAME);
     }
 }

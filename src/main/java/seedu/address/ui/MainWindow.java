@@ -15,12 +15,10 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonBar;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
@@ -29,6 +27,12 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.budget.Budget;
+import seedu.address.ui.budget.BudgetListPanel;
+import seedu.address.ui.budget.BudgetPanel;
+import seedu.address.ui.expense.ExpenseListPanel;
+import seedu.address.ui.panel.PanelName;
+import seedu.address.ui.panel.PanelView;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -43,8 +47,10 @@ public class MainWindow extends UiPart<Stage> {
     private Stage primaryStage;
     private Logic logic;
 
-    // Independent Ui parts residing in this Ui container
-    // Ui parts which the user can switch between
+    private PanelView panelView;
+
+    // Independent Panels residing in this Ui container
+    // which can be switched between using the PanelManager
     private ExpenseListPanel expenseListPanel;
     private BudgetListPanel budgetListPanel;
     private BudgetPanel budgetPanel;
@@ -128,10 +134,20 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
+
+        panelView = new PanelView();
         expenseListPanel = new ExpenseListPanel(logic.getFilteredExpenseList(), true);
         budgetListPanel = new BudgetListPanel(logic.getFilteredBudgetList());
-        budgetPanel = null;
-        panelPlaceholder.getChildren().add(expenseListPanel.getRoot());
+        budgetPanel = new BudgetPanel(Budget.createDefaultBudget());
+
+//        panelManagerView.setPanel(PanelName.ALIASES_PANEL, null);
+        panelView.setPanel(BudgetListPanel.PANEL_NAME, budgetListPanel);
+        panelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
+        panelView.setPanel(ExpenseListPanel.PANEL_NAME, expenseListPanel);
+//        panelManagerView.setPanel(PanelName.EVENTS_PANEL, null);
+//        panelManagerView.setPanel(PanelName.STATISTICS_PANEL, null);
+        panelPlaceholder.getChildren().add(panelView.getRoot());
+
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -140,8 +156,13 @@ public class MainWindow extends UiPart<Stage> {
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
-        commandBox.importSyntaxStyleSheet(getRoot().getScene());
+        enableSyntaxHighlighting(commandBox);
 
+        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+    }
+
+    private void enableSyntaxHighlighting(CommandBox commandBox) {
+        commandBox.importSyntaxStyleSheet(getRoot().getScene());
         // add supported commands (not all yet)
         commandBox.enableSyntaxHightlightingForCommand("add",
                 List.of(PREFIX_PRICE, PREFIX_DESCRIPTION),
@@ -164,10 +185,7 @@ public class MainWindow extends UiPart<Stage> {
         commandBox.enableSyntaxHightlightingForCommand("redo",
                 Collections.emptyList(),
                 "redo");
-
         commandBox.enableSyntaxHighlighting();
-
-        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
     /**
@@ -180,6 +198,11 @@ public class MainWindow extends UiPart<Stage> {
             primaryStage.setX(guiSettings.getWindowCoordinates().getX());
             primaryStage.setY(guiSettings.getWindowCoordinates().getY());
         }
+    }
+
+    private void changePanel(PanelName panelName) {
+        System.out.println("changing to panel----" + panelName);
+        panelView.viewPanel(panelName);
     }
 
     /**
@@ -219,14 +242,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     private boolean viewBudgetPanel() {
-        if (logic.getPrimaryBudget() == null) {
-            Label label = new Label("No Primary Budget. This is a Placeholder.");
-            label.setBackground(Background.EMPTY);
-            panelPlaceholder.getChildren().set(0, label);
-            return false;
-        }
-        budgetPanel = new BudgetPanel(logic.getPrimaryBudget());
-        panelPlaceholder.getChildren().set(0, budgetPanel.getRoot());
+        changePanel(BudgetPanel.PANEL_NAME);
         return true;
     }
 
@@ -235,7 +251,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     private void viewExpenseListPanel() {
-        panelPlaceholder.getChildren().set(0, expenseListPanel.getRoot());
+        changePanel(ExpenseListPanel.PANEL_NAME);
     }
 
     /**
@@ -243,7 +259,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     private void viewBudgetListPanel() {
-        panelPlaceholder.getChildren().set(0, budgetListPanel.getRoot());
+        changePanel(BudgetListPanel.PANEL_NAME);
     }
 
     public ExpenseListPanel getExpenseListPanel() {
@@ -260,6 +276,10 @@ public class MainWindow extends UiPart<Stage> {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+
+            if (commandResult.isViewRequest()) {
+                changePanel(commandResult.viewRequest());
+            }
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -281,7 +301,6 @@ public class MainWindow extends UiPart<Stage> {
      * Displays Reminders of the user's upcoming Events.
      */
     public void displayReminders() {
-        // logger.info("Result: " + commandResult.getFeedbackToUser());
         resultDisplay.setFeedbackToUser(logic.displayReminders());
     }
 

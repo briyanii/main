@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.commons.core.Alias;
-import seedu.address.logic.commands.AliasCommand;
+import seedu.address.logic.commands.alias.AliasCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 

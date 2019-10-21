@@ -11,7 +11,6 @@ import static javafx.scene.input.KeyCode.KP_LEFT;
 import static javafx.scene.input.KeyCode.KP_RIGHT;
 import static javafx.scene.input.KeyCode.KP_UP;
 import static javafx.scene.input.KeyCode.LEFT;
-import static javafx.scene.input.KeyCode.P;
 import static javafx.scene.input.KeyCode.RIGHT;
 import static javafx.scene.input.KeyCode.UP;
 import static javafx.scene.input.KeyCode.V;
@@ -47,10 +46,8 @@ import org.reactfx.Subscription;
 
 import javafx.beans.property.StringProperty;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ContextMenuEvent;
@@ -58,8 +55,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.logic.parser.Prefix;
 
@@ -277,10 +272,8 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
 
     private void mirrorViewportMovement(StyleClassedTextArea visibleTextArea, KeyEvent keyEvent) {
         // mirrors navigation
-        System.out.println(keyEvent.getCode());
         if (keyEvent.getCode().isNavigationKey()) {
             visibleTextArea.fireEvent(keyEvent);
-            System.out.println(keyEvent.getCode());
 
             // mirrors view port shifting right on character input
         } else if (addsCharacterToTextArea.test(keyEvent)) {

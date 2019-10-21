@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.AliasCommand;
-import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.alias.AliasCommand;
+import seedu.address.logic.commands.expense.ClearCommand;
 import seedu.address.logic.commands.CommandTestUtil;
-import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.EditCommand.EditExpenseDescriptor;
-import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.ListCommand;
-import seedu.address.logic.commands.StatsCommand;
+import seedu.address.logic.commands.expense.DeleteCommand;
+import seedu.address.logic.commands.expense.EditCommand.EditExpenseDescriptor;
+import seedu.address.logic.commands.expense.EditCommand;
+import seedu.address.logic.commands.general.ExitCommand;
+import seedu.address.logic.commands.expense.FindCommand;
+import seedu.address.logic.commands.general.HelpCommand;
+import seedu.address.logic.commands.expense.ListCommand;
+import seedu.address.logic.commands.statistics.StatsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;

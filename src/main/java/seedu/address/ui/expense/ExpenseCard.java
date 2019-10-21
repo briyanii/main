@@ -1,4 +1,4 @@
-package seedu.address.ui;
+package seedu.address.ui.expense;
 
 import java.time.format.DateTimeFormatter;
 
@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import seedu.address.model.expense.Expense;
+import seedu.address.ui.UiPart;
 
 /**
  * An UI component that displays information of a {@code Expense}.

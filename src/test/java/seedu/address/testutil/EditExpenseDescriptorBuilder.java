@@ -1,7 +1,7 @@
 package seedu.address.testutil;
 
 import seedu.address.logic.commands.EditCommand.EditExpenseDescriptor;
-
+import seedu.address.logic.commands.expense.EditCommand;
 import seedu.address.model.category.Category;
 import seedu.address.model.expense.Description;
 import seedu.address.model.expense.Expense;
@@ -67,7 +67,7 @@ public class EditExpenseDescriptorBuilder {
         return this;
     }
 
-    public EditExpenseDescriptor build() {
+    public EditCommand.EditExpenseDescriptor build() {
         return descriptor;
     }
 }

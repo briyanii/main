@@ -1,4 +1,4 @@
-package seedu.address.ui;
+package seedu.address.ui.budget;
 
 import java.util.logging.Logger;
 
@@ -11,12 +11,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
+import seedu.address.ui.UiPart;
+import seedu.address.ui.panel.Panel;
+import seedu.address.ui.panel.PanelName;
 
 /**
  * Panel containing the list of budgets.
  */
-public class BudgetListPanel extends UiPart<Region> {
+public class BudgetListPanel extends Panel {
     private static final String FXML = "ListPanel.fxml";
+    public static final PanelName PANEL_NAME = new PanelName("Budget List");
+
     private final Logger logger = LogsCenter.getLogger(BudgetListPanel.class);
 
     @FXML
@@ -31,6 +36,24 @@ public class BudgetListPanel extends UiPart<Region> {
         listView.setItems(budgetList);
         listView.setCellFactory(listView -> new BudgetListViewCell());
 
+    }
+
+    @Override
+    public int hashCode() {
+        return PANEL_NAME.hashCode();
+    }
+
+    @Override
+    public void view() {
+        getRoot().setVisible(true);
+        getRoot().setDisable(false);
+
+    }
+
+    @Override
+    public void hide() {
+        getRoot().setVisible(false);
+        getRoot().setDisable(true);
     }
 
     /**
