@@ -55,11 +55,7 @@ public class AliasCommandTest {
         assertThrows(CommandException.class, () -> command.run(model));
     }
 
-    @Test
-    public void run_aliasCommandWordIsAlias_throwsCommandException() {
-        AliasCommand command = new AliasCommand(AliasTestUtil.ALIAS_TO_ALIAS);
-        assertThrows(CommandException.class, () -> command.run(model));
-    }
+    // removed test, alias mapping to alias creation does not result in unwanted behaviour
 
     @Test
     public void run_aliasCommandIsValid_success() {
