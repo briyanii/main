@@ -15,6 +15,7 @@ import seedu.address.commons.core.Alias;
 import seedu.address.commons.core.AliasMappings;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.exceptions.RecursiveAliasException;
 import seedu.address.model.budget.Budget;
 import seedu.address.model.expense.Description;
 import seedu.address.model.expense.Event;
@@ -189,7 +190,12 @@ public class ModelManager implements Model {
 
     @Override
     public void addUserAlias(Alias alias) {
-        userPrefs.addUserAlias(alias);
+        try {
+            userPrefs.addUserAlias(alias);
+        } catch (RecursiveAliasException e) {
+            // should should be prevented by validation
+            e.printStackTrace();
+        }
     }
 
     //=========== GuiSettings ===============================================================================

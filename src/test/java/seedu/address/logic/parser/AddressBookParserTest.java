@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_INPUT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -54,7 +56,9 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_alias() throws Exception {
         AliasCommand aliasCommand = (AliasCommand) parser.parseCommand(
-                AliasCommand.COMMAND_WORD + " " + "a b", readOnlyUserPrefs);
+                String.format("%s %s a %s b",
+                        AliasCommand.COMMAND_WORD, PREFIX_ALIAS_ALIAS_NAME, PREFIX_ALIAS_ALIAS_INPUT),
+                readOnlyUserPrefs);
         assertEquals(aliasCommand, new AliasCommand(AliasTestUtil.ALIAS_A_TO_B));
     }
 

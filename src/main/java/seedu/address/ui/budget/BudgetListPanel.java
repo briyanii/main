@@ -11,6 +11,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
+import seedu.address.model.expense.Description;
 import seedu.address.ui.UiPart;
 import seedu.address.ui.panel.Panel;
 import seedu.address.ui.panel.PanelName;
@@ -36,11 +37,6 @@ public class BudgetListPanel extends Panel {
         listView.setItems(budgetList);
         listView.setCellFactory(listView -> new BudgetListViewCell());
 
-    }
-
-    @Override
-    public int hashCode() {
-        return PANEL_NAME.hashCode();
     }
 
     @Override

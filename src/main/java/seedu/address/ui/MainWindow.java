@@ -1,6 +1,8 @@
 package seedu.address.ui;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_INPUT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERIOD;
@@ -32,7 +34,9 @@ import seedu.address.ui.budget.BudgetListPanel;
 import seedu.address.ui.budget.BudgetPanel;
 import seedu.address.ui.expense.ExpenseListPanel;
 import seedu.address.ui.panel.PanelName;
-import seedu.address.ui.panel.PanelView;
+import seedu.address.ui.panel.PlaceholderPanel;
+import seedu.address.ui.panel.SinglePanelView;
+import seedu.address.ui.panel.exceptions.UnmappedPanelException;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -47,7 +51,7 @@ public class MainWindow extends UiPart<Stage> {
     private Stage primaryStage;
     private Logic logic;
 
-    private PanelView panelView;
+    private SinglePanelView singlePanelView;
 
     // Independent Panels residing in this Ui container
     // which can be switched between using the PanelManager
@@ -135,18 +139,21 @@ public class MainWindow extends UiPart<Stage> {
      */
     void fillInnerParts() {
 
-        panelView = new PanelView();
+        singlePanelView = new SinglePanelView();
         expenseListPanel = new ExpenseListPanel(logic.getFilteredExpenseList(), true);
         budgetListPanel = new BudgetListPanel(logic.getFilteredBudgetList());
         budgetPanel = new BudgetPanel(Budget.createDefaultBudget());
 
-//        panelManagerView.setPanel(PanelName.ALIASES_PANEL, null);
-        panelView.setPanel(BudgetListPanel.PANEL_NAME, budgetListPanel);
-        panelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
-        panelView.setPanel(ExpenseListPanel.PANEL_NAME, expenseListPanel);
-//        panelManagerView.setPanel(PanelName.EVENTS_PANEL, null);
-//        panelManagerView.setPanel(PanelName.STATISTICS_PANEL, null);
-        panelPlaceholder.getChildren().add(panelView.getRoot());
+        singlePanelView.setPanel(PanelName.ALIASES_PANEL, new PlaceholderPanel());
+        singlePanelView.setPanel(BudgetListPanel.PANEL_NAME, budgetListPanel);
+        singlePanelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
+
+        singlePanelView.setPanel(ExpenseListPanel.PANEL_NAME, expenseListPanel);
+        expenseListPanel.view();
+
+        singlePanelView.setPanel(PanelName.EVENTS_PANEL, new PlaceholderPanel());
+        singlePanelView.setPanel(PanelName.STATISTICS_PANEL, new PlaceholderPanel());
+        panelPlaceholder.getChildren().add(singlePanelView.getRoot());
 
 
         resultDisplay = new ResultDisplay();
@@ -164,27 +171,13 @@ public class MainWindow extends UiPart<Stage> {
     private void enableSyntaxHighlighting(CommandBox commandBox) {
         commandBox.importSyntaxStyleSheet(getRoot().getScene());
         // add supported commands (not all yet)
-        commandBox.enableSyntaxHightlightingForCommand("add",
-                List.of(PREFIX_PRICE, PREFIX_DESCRIPTION),
-                "add d/<description_here> p/ <price here>");
-        commandBox.enableSyntaxHightlightingForCommand("alias",
-                Collections.emptyList(),
-                "alias <alias_name> <input>");
-        commandBox.enableSyntaxHightlightingForCommand("budget",
-                List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_START_DATE, PREFIX_PERIOD),
-                "budget d/ <description> p/ <amount> sd/ <start_date> pr/ <period>");
-        commandBox.enableSyntaxHightlightingForCommand("event",
-                List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_CATEGORY, PREFIX_TIMESTAMP),
-                "event d/ <description> p/ <amount> date/ <date>");
-        commandBox.enableSyntaxHightlightingForCommand("stats",
-                List.of(PREFIX_DESCRIPTION, PREFIX_START_DATE, PREFIX_END_DATE),
-                "stats sd/ <start_date> ed/ <end_date>");
-        commandBox.enableSyntaxHightlightingForCommand("undo",
-                Collections.emptyList(),
-                "undo");
-        commandBox.enableSyntaxHightlightingForCommand("redo",
-                Collections.emptyList(),
-                "redo");
+        commandBox.enableSyntaxHightlightingForCommand("add", List.of(PREFIX_PRICE, PREFIX_DESCRIPTION));
+        commandBox.enableSyntaxHightlightingForCommand("alias", List.of(PREFIX_ALIAS_ALIAS_NAME, PREFIX_ALIAS_ALIAS_INPUT));
+        commandBox.enableSyntaxHightlightingForCommand("budget", List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_START_DATE, PREFIX_PERIOD));
+        commandBox.enableSyntaxHightlightingForCommand("event", List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_TAG, PREFIX_TIMESTAMP));
+        commandBox.enableSyntaxHightlightingForCommand("stats", List.of(PREFIX_DESCRIPTION, PREFIX_START_DATE, PREFIX_END_DATE));
+        commandBox.enableSyntaxHightlightingForCommand("undo", Collections.emptyList());
+        commandBox.enableSyntaxHightlightingForCommand("redo", Collections.emptyList());
         commandBox.enableSyntaxHighlighting();
     }
 
@@ -200,9 +193,8 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
-    private void changePanel(PanelName panelName) {
-        System.out.println("changing to panel----" + panelName);
-        panelView.viewPanel(panelName);
+    private void changePanel(PanelName panelName) throws UnmappedPanelException {
+        singlePanelView.viewPanel(panelName);
     }
 
     /**
@@ -234,58 +226,25 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Changes the panel displayed in the application's panelPlaceholder to the Budget Panel if
-     * the model has a primary budget, returning true if there is a primary budget to display, otherwise
-     * return's false.
-     *
-     * @return true if there is a primary budget to display, false otherwise.
-     */
-    @FXML
-    private boolean viewBudgetPanel() {
-        changePanel(BudgetPanel.PANEL_NAME);
-        return true;
-    }
-
-    /**
-     * Changes the panel displayed in the application's panelPlaceholder to the Expense List Panel.
-     */
-    @FXML
-    private void viewExpenseListPanel() {
-        changePanel(ExpenseListPanel.PANEL_NAME);
-    }
-
-    /**
-     * Changes the panel displayed in the application's panelPlaceholder to the Budget List Panel.
-     */
-    @FXML
-    private void viewBudgetListPanel() {
-        changePanel(BudgetListPanel.PANEL_NAME);
-    }
-
-    public ExpenseListPanel getExpenseListPanel() {
-        return expenseListPanel;
-    }
-
-    /**
      * Executes the command and returns the result.
      *
      * @see seedu.address.logic.Logic#execute(String)
      */
-    private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
+    private CommandResult executeCommand(String commandText) throws CommandException, ParseException, UnmappedPanelException {
         try {
             CommandResult commandResult = logic.execute(commandText);
-            logger.info("Result: " + commandResult.getFeedbackToUser());
-            resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             if (commandResult.isViewRequest()) {
                 // ensure budget panel is updated
                 if (commandResult.viewRequest().equals(BudgetPanel.PANEL_NAME)) {
                     budgetPanel = new BudgetPanel(logic.getPrimaryBudget());
-                    panelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
+                    singlePanelView.setPanel(BudgetPanel.PANEL_NAME, budgetPanel);
                 }
                 changePanel(commandResult.viewRequest());
             }
 
+            logger.info("Result: " + commandResult.getFeedbackToUser());
+            resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
@@ -296,7 +255,7 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             return commandResult;
-        } catch (CommandException | ParseException e) {
+        } catch (CommandException | UnmappedPanelException | ParseException e) {
             logger.info("Invalid command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
