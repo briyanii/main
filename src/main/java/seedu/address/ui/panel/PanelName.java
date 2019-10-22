@@ -1,18 +1,37 @@
 package seedu.address.ui.panel;
 
+import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.AppUtil.checkArgument;
+
+import java.util.regex.Pattern;
+
+/**
+ * Represents a Panel Name which is used in the GUI.
+ */
 public class PanelName {
-//    public static PanelName ALIASES_PANEL = new PanelName("AliasPanel");
-//    public static PanelName BUDGET_LIST_PANEL = new PanelName("Budgets");
-//    public static PanelName BUDGET_PANEL = new PanelName("Budget Panel");
-    public static PanelName CURRENT = new PanelName("Current");
-//    public static PanelName EVENTS_PANEL = new PanelName("Events");
-//    public static PanelName EXPENSE_LIST_PANEL = new PanelName("Expenses");
-//    public static PanelName STATISTICS_PANEL = new PanelName("Statistics");
+    public static final PanelName CURRENT = new PanelName("Current Page");
+
+    // temporary
+    public static PanelName ALIASES_PANEL = new PanelName("Aliases");
+    public static PanelName EVENTS_PANEL = new PanelName("Events");
+    public static PanelName STATISTICS_PANEL = new PanelName("Statistics");
+
+    public static final String MESSAGE_NAME_FORMAT = "\"%s\" is not a valid panel name. \n"
+            + "Panel names can only have alphanumeric characters with whitespaces in between.";
+
+    private static final String NAME_VALIDATION_REGEX = "\\p{Alnum}+(\\s+\\p{Alnum}+)*";
 
     private final String panelName;
 
     public PanelName(String panelName) {
-        this.panelName = panelName;
+        requireNonNull(panelName);
+        String trimmed = panelName.trim();
+        checkArgument(isValidPanelName(trimmed), String.format(MESSAGE_NAME_FORMAT, panelName));
+        this.panelName = trimmed;
+    }
+
+    public static boolean isValidPanelName(String panelName) {
+        return Pattern.compile(NAME_VALIDATION_REGEX).matcher(panelName).matches();
     }
 
     @Override
@@ -36,6 +55,6 @@ public class PanelName {
 
     @Override
     public String toString() {
-        return "PANEL NAME: " + panelName;
+        return "[Panel: " + panelName + "]";
     }
 }
