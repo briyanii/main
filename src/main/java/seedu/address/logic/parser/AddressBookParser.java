@@ -7,24 +7,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.core.Alias;
-import seedu.address.logic.commands.expense.AddCommand;
-import seedu.address.logic.commands.event.AddEventCommand;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.alias.AliasCommand;
 import seedu.address.logic.commands.budget.AddBudgetCommand;
+import seedu.address.logic.commands.budget.SwitchBudgetCommand;
+import seedu.address.logic.commands.event.AddEventCommand;
+import seedu.address.logic.commands.event.ListEventsCommand;
+import seedu.address.logic.commands.expense.AddCommand;
 import seedu.address.logic.commands.expense.ClearCommand;
-import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.expense.DeleteCommand;
 import seedu.address.logic.commands.expense.EditCommand;
-import seedu.address.logic.commands.general.ExitCommand;
 import seedu.address.logic.commands.expense.FindCommand;
-import seedu.address.logic.commands.general.HelpCommand;
 import seedu.address.logic.commands.expense.ListCommand;
-import seedu.address.logic.commands.event.ListEventsCommand;
-import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.general.ExitCommand;
+import seedu.address.logic.commands.general.HelpCommand;
 import seedu.address.logic.commands.statistics.StatsCommand;
 import seedu.address.logic.commands.statistics.StatsCompareCommand;
-import seedu.address.logic.commands.budget.SwitchBudgetCommand;
-import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.ui.ViewPanelCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyUserPrefs;
@@ -98,7 +98,7 @@ public class AddressBookParser {
             // check if alias exists
             if (readOnlyUserPrefs.hasAlias(commandWord)) {
                 Alias alias = readOnlyUserPrefs.getAlias(commandWord);
-                return parseCommand(alias.getInput() + " " + arguments, readOnlyUserPrefs);
+                return parseCommand(alias.getInput() + arguments, readOnlyUserPrefs);
             }
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }

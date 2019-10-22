@@ -12,6 +12,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.Prefix;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.ui.panel.exceptions.UnmappedPanelException;
 
 /**
  * The UI component that is responsible for receiving user command inputs.
@@ -54,7 +55,7 @@ public class CommandBox extends UiPart<Region> {
         try {
             commandExecutor.execute(commandSyntaxHighlightingTextArea.getText());
             commandSyntaxHighlightingTextArea.clear();
-        } catch (CommandException | ParseException e) {
+        } catch (CommandException | ParseException | UnmappedPanelException e) {
             setStyleToIndicateCommandFailure();
         }
     }
@@ -79,10 +80,9 @@ public class CommandBox extends UiPart<Region> {
      * Adds a command to enable syntax highlighting for
      * @param com The command word of the command
      * @param pre The prefix of the command
-     * @param syntax The minimum syntax required
      */
-    public void enableSyntaxHightlightingForCommand(String com, List<Prefix> pre, String syntax) {
-        commandSyntaxHighlightingTextArea.createPattern(com, pre, syntax);
+    public void enableSyntaxHightlightingForCommand(String com, List<Prefix> pre) {
+        commandSyntaxHighlightingTextArea.createPattern(com, pre);
     }
 
     /**
@@ -108,7 +108,7 @@ public class CommandBox extends UiPart<Region> {
          *
          * @see seedu.address.logic.Logic#execute(String)
          */
-        CommandResult execute(String commandText) throws CommandException, ParseException;
+        CommandResult execute(String commandText) throws CommandException, ParseException, UnmappedPanelException;
     }
 
 }

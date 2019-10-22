@@ -203,7 +203,6 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
             }
         });
 
-
         // ----- sizing ------
         textArea.fontProperty().addListener((observableValue, font, t1) -> {
             double h = t1.getSize() + 5;
@@ -225,10 +224,6 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
             styleClassedTextArea.setMaxWidth(t1.doubleValue());
         });
 
-
-
-
-
         Nodes.addInputMap(textArea, consumeMassSelectionEvent);
         Nodes.addInputMap(textArea, consumeContextMenuRequestEvent);
         Nodes.addInputMap(textArea, consumeCopyPasteEvent);
@@ -249,8 +244,12 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
         styleClassedTextArea.clear();
     }
 
+    /**
+     * Filters placeholders from input before returning value.
+     * @return The text property value of the text area with placeholders replaced with an empty String.
+     */
     public String getText() {
-        return textArea.getText();
+        return textArea.getText().replaceAll(PLACE_HOLDER_REGEX, "");
     }
 
     public StringProperty textProperty() {
@@ -334,13 +333,21 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
      *
      * @param command The command word
      * @param prefixes List of prefixes required in the command
-     * @param requiredSyntax Syntax for the autofill to replace text with
      */
-    public void createPattern(String command, List<Prefix> prefixes, String requiredSyntax) {
+    public void createPattern(String command, List<Prefix> prefixes) {
         Pattern p = compileCommandPattern(command, prefixes);
         stringPatternMap.put(command, p);
         stringIntMap.put(command, prefixes.size());
-        stringAutofillMap.put(command, requiredSyntax);
+        StringBuilder autofill = new StringBuilder();
+        autofill.append(command);
+        for (Prefix prefix : prefixes) {
+            autofill.append(" ");
+            autofill.append(prefix.getPrefix());
+            autofill.append(" <");
+            autofill.append(prefix.getDescriptionOfArgument());
+            autofill.append(">");
+        }
+        stringAutofillMap.put(command, autofill.toString());
     }
 
     /**

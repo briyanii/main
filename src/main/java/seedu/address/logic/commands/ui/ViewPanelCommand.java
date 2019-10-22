@@ -6,24 +6,45 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.ui.panel.PanelName;
 
+/**
+ * Changes the currently viewed panel in the MainWindow's PanelView.
+ */
 public class ViewPanelCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
     private PanelName panelName;
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Navigates to the specified GUI panel. \n"
+            + "PARAMETERS: <Panel Name> \n"
+            + "EXAMPLE: view Budget List \n";
+
+    public static final String MESSAGE_SUCCESS = "Viewing: %s";
+
 
     public ViewPanelCommand(PanelName panelName) {
         this.panelName = panelName;
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof ViewPanelCommand)) {
+            return false;
+        }
+        ViewPanelCommand otherViewPanelCommand = (ViewPanelCommand) obj;
+        return otherViewPanelCommand.panelName.equals(panelName);
+    }
+
+    @Override
     protected void validate(Model model) throws CommandException {
-        // no validation needed
+        // No need to validate as model is not affected.
     }
 
     @Override
     protected CommandResult execute(Model model) throws CommandException {
-        System.out.println("viewing");
-        return new CommandResult("Now Showing ...", false, false, false, true, panelName);
+        return new CommandResult("Now Showing: " + panelName.toString(), false, false, false, true, panelName);
     }
 
 }

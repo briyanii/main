@@ -12,7 +12,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.expense.Expense;
 import seedu.address.ui.expense.ExpenseListPanel;
-import seedu.address.ui.panel.PanelName;
 
 /**
  * Deletes a expense identified using it's displayed index from the address book.

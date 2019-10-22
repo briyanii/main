@@ -20,7 +20,10 @@ public class SyntaxTextDemo extends Application {
 
         Scene scene = new Scene(commandSyntaxHighlightingTextArea);
         commandSyntaxHighlightingTextArea.importStyleSheet(scene);
-        commandSyntaxHighlightingTextArea.createPattern("add", List.of(new Prefix("d/"), new Prefix("p/")), "add d/ <type here to replace placeholder> p/ <placeholder>");
+        commandSyntaxHighlightingTextArea.createPattern("add",
+                List.of(
+                        new Prefix("d/", "no argument description"),
+                        new Prefix("p/", "no argument description")));
         commandSyntaxHighlightingTextArea.enableSyntaxHighlighting();
         stage.setScene(scene);
         scene.widthProperty().addListener((observableValue, number, t1) -> {
