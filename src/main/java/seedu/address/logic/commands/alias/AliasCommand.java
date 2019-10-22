@@ -1,6 +1,8 @@
 package seedu.address.logic.commands.alias;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_INPUT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_NAME;
 
 import seedu.address.commons.core.Alias;
 import seedu.address.logic.commands.CommandResult;
@@ -16,8 +18,8 @@ public class AliasCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "alias";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Create a shortcut for commonly used Commands.\n"
-            + "Parameters: ALIAS_NAME USER_INPUT [more USER_INPUT]\n"
-            + "Example: findAnimal find rat rats mouse mice cow cows ox oxen tiger tigers";
+            + "Parameters: " + PREFIX_ALIAS_ALIAS_NAME + " <alias name>  " + PREFIX_ALIAS_ALIAS_INPUT + " <input string> \n"
+            + "Example: alias " + PREFIX_ALIAS_ALIAS_NAME + " findAnimal " + PREFIX_ALIAS_ALIAS_INPUT + " find rat rats mouse mice cow cows ox oxen tiger tigers";
 
     public static final String MESSAGE_SUCCESS = "Alias created: %1$s";
 
@@ -43,15 +45,13 @@ public class AliasCommand extends UndoableCommand {
 
         // if command_word is reserved
         String aliasName = toAdd.getAliasName();
-        if (model.getUserPrefs().aliasNameIsReserved(aliasName)) {
+        if (model.getUserPrefs().aliasNameIsReserved(toAdd)) {
             throw new CommandException(String.format(MESSAGE_RESERVED_NAME, aliasName));
         }
 
         // if recursive
-        String commandWord = toAdd.getInput().stripLeading().split("\\s+")[0];
-        if (commandWord.equalsIgnoreCase(aliasName)
-                || commandWord.equalsIgnoreCase(COMMAND_WORD)
-                || model.getUserPrefs().aliasCommandWordIsAlias(commandWord)) {
+        String commandWord = toAdd.getCommandWord();
+        if (commandWord.equalsIgnoreCase(aliasName) || model.getUserPrefs().aliasCommandWordIsAlias(toAdd)) {
             throw new CommandException(MESSAGE_RECURSIVE_WARNING);
         }
     }
