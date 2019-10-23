@@ -27,6 +27,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.ui.ViewPanelCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.ui.budget.BudgetListPanel;
 import seedu.address.ui.budget.BudgetPanel;
@@ -150,7 +151,6 @@ public class MainWindow extends UiPart<Stage> {
         panelPlaceholder.getChildren().add(singlePanelView.getRoot());
         expenseListPanel.view();
 
-
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
@@ -163,6 +163,10 @@ public class MainWindow extends UiPart<Stage> {
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
+    /**
+     * Enables syntax highlighting for a set of commands in a specified commandBox.
+     * @param commandBox The commandBox to enable syntax highlighting in.
+     */
     private void enableSyntaxHighlighting(CommandBox commandBox) {
         commandBox.importSyntaxStyleSheet(getRoot().getScene());
         // add supported commands (not all yet)
@@ -195,7 +199,13 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    /**
+     * Changes the currently viewed Panel in the MainWindow.
+     * @param panelName The Panel Name of assigned to the Panel.
+     * @throws UnmappedPanelException if there is no Panel assigned to the specified Panel Name.
+     */
     private void changePanel(PanelName panelName) throws UnmappedPanelException {
+        // updates the budget panel to display the primary budget.
         if (panelName.equals(BudgetPanel.PANEL_NAME)) {
             singlePanelView.setPanel(BudgetPanel.PANEL_NAME, new BudgetPanel(logic.getPrimaryBudget()));
         }
@@ -247,8 +257,6 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
-
-
             if (commandResult.isShowHelp()) {
                 handleHelp();
             }
@@ -258,9 +266,14 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             return commandResult;
-        } catch (CommandException | UnmappedPanelException | ParseException e) {
+        } catch (CommandException | UnmappedPanelException e) {
             logger.info("Invalid command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
+            throw e;
+        } catch (ParseException e) {
+            logger.info("Invalid command: " + commandText);
+            resultDisplay.setFeedbackToUser(e.getMessage() + "\n"
+                    + String.format(ViewPanelCommand.SHOW_AVAILABLE_PANELS, singlePanelView.toString()));
             throw e;
         }
     }

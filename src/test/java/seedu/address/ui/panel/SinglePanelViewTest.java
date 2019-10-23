@@ -1,6 +1,5 @@
 package seedu.address.ui.panel;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -59,7 +58,7 @@ class SinglePanelViewTest {
     }
 
     @Test
-    void hasPanel_AfterSettingPanel_returnTrue() {
+    void hasPanel_afterSettingPanel_returnTrue() {
         if (!panelManager.setPanel(page1, panel1)
                 || !panelManager.setPanel(page2, panel2)
                 || !panelManager.setPanel(page3, panel3)) {

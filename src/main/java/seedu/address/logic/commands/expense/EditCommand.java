@@ -87,7 +87,8 @@ public class EditCommand extends UndoableCommand {
 
         model.setExpense(expenseToEdit, editedExpense);
         model.updateFilteredExpenseList(PREDICATE_SHOW_ALL_EXPENSES);
-        return new CommandResult(String.format(MESSAGE_EDIT_EXPENSE_SUCCESS, editedExpense), ExpenseListPanel.PANEL_NAME);
+        return new CommandResult(String.format(MESSAGE_EDIT_EXPENSE_SUCCESS, editedExpense),
+                ExpenseListPanel.PANEL_NAME);
     }
 
     /**

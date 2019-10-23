@@ -12,13 +12,13 @@ import seedu.address.ui.panel.PanelName;
 public class ViewPanelCommand extends Command {
 
     public static final String COMMAND_WORD = "view";
-    private PanelName panelName;
-
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Navigates to the specified GUI panel. \n"
             + "PARAMETERS: <Panel Name> \n"
             + "EXAMPLE: view Budget List \n";
-
     public static final String MESSAGE_SUCCESS = "Viewing: %s";
+    public static final String SHOW_AVAILABLE_PANELS = "Here are the panels that you may view:\n%s";
+
+    private PanelName panelName;
 
 
     public ViewPanelCommand(PanelName panelName) {

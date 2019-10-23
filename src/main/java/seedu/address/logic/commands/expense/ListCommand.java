@@ -7,7 +7,6 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.UndoableCommand;
 import seedu.address.model.Model;
 import seedu.address.ui.expense.ExpenseListPanel;
-import seedu.address.ui.panel.PanelName;
 
 /**
  * Lists all expenses in the address book to the user.

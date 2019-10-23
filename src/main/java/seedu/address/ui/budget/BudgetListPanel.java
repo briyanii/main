@@ -7,12 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
-import seedu.address.model.expense.Description;
-import seedu.address.ui.UiPart;
 import seedu.address.ui.panel.Panel;
 import seedu.address.ui.panel.PanelName;
 
@@ -20,9 +17,8 @@ import seedu.address.ui.panel.PanelName;
  * Panel containing the list of budgets.
  */
 public class BudgetListPanel extends Panel {
-    private static final String FXML = "ListPanel.fxml";
     public static final PanelName PANEL_NAME = new PanelName("Budget List");
-
+    private static final String FXML = "ListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(BudgetListPanel.class);
 
     @FXML
@@ -43,7 +39,6 @@ public class BudgetListPanel extends Panel {
     public void view() {
         getRoot().setVisible(true);
         getRoot().setDisable(false);
-
     }
 
     @Override

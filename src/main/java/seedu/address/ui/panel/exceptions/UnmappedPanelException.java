@@ -4,6 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import seedu.address.ui.panel.PanelName;
 
+/**
+ * Exception to be thrown when an error is caused by a PanelName in PanelManager not being assigned to a Panel.
+ */
 public class UnmappedPanelException extends Exception {
 
     public UnmappedPanelException(PanelName panelName) {

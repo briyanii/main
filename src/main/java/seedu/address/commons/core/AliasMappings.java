@@ -122,7 +122,7 @@ public class AliasMappings implements Serializable {
 
         AliasMappings other = (AliasMappings) obj;
 
-//         contains the same keys, for the keys it contains, it maps to the same inputs
+        // contains the same keys, for the keys it contains, it maps to the same inputs
         if (!aliasNameToAliasMap.keySet().equals(other.aliasNameToAliasMap.keySet())) {
             return false;
         }

@@ -12,9 +12,9 @@ public class PanelName {
     public static final PanelName CURRENT = new PanelName("Current Page");
 
     // temporary
-    public static PanelName ALIASES_PANEL = new PanelName("Aliases");
-    public static PanelName EVENTS_PANEL = new PanelName("Events");
-    public static PanelName STATISTICS_PANEL = new PanelName("Statistics");
+    public static final PanelName ALIASES_PANEL = new PanelName("Aliases");
+    public static final PanelName EVENTS_PANEL = new PanelName("Events");
+    public static final PanelName STATISTICS_PANEL = new PanelName("Statistics");
 
     public static final String MESSAGE_NAME_FORMAT = "\"%s\" is not a valid panel name. \n"
             + "Panel names can only have alphanumeric characters with whitespaces in between.";

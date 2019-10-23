@@ -28,10 +28,10 @@ public class AliasCommandParser implements Parser<AliasCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_ALIAS_ALIAS_INPUT, PREFIX_ALIAS_ALIAS_NAME);
 
-//        if (!arePrefixesPresent(argMultimap, PREFIX_ALIAS_ALIAS_NAME, PREFIX_ALIAS_ALIAS_INPUT)
-//                || !argMultimap.getPreamble().isEmpty()) {
-//            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AliasCommand.MESSAGE_USAGE));
-//        }
+        if (!arePrefixesPresent(argMultimap, PREFIX_ALIAS_ALIAS_NAME, PREFIX_ALIAS_ALIAS_INPUT)
+                || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AliasCommand.MESSAGE_USAGE));
+        }
 
         Optional<String> aliasName = argMultimap.getValue(PREFIX_ALIAS_ALIAS_NAME);
         Optional<String> aliasInputMapping = argMultimap.getValue(PREFIX_ALIAS_ALIAS_INPUT);

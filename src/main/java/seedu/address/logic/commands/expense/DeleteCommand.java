@@ -50,7 +50,8 @@ public class DeleteCommand extends UndoableCommand {
 
         Expense expenseToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.deleteExpense(expenseToDelete);
-        return new CommandResult(String.format(MESSAGE_DELETE_EXPENSE_SUCCESS, expenseToDelete), ExpenseListPanel.PANEL_NAME);
+        return new CommandResult(String.format(MESSAGE_DELETE_EXPENSE_SUCCESS, expenseToDelete),
+                ExpenseListPanel.PANEL_NAME);
     }
 
     @Override

@@ -6,15 +6,15 @@ import static seedu.address.logic.commands.CommandTestUtil.PRICE_DESC_CHICKEN;
 import seedu.address.commons.core.Alias;
 import seedu.address.commons.core.AliasMappings;
 import seedu.address.commons.exceptions.RecursiveAliasException;
-import seedu.address.logic.commands.expense.AddCommand;
 import seedu.address.logic.commands.alias.AliasCommand;
+import seedu.address.logic.commands.expense.AddCommand;
 import seedu.address.logic.commands.expense.ClearCommand;
 import seedu.address.logic.commands.expense.DeleteCommand;
 import seedu.address.logic.commands.expense.EditCommand;
-import seedu.address.logic.commands.general.ExitCommand;
 import seedu.address.logic.commands.expense.FindCommand;
-import seedu.address.logic.commands.general.HelpCommand;
 import seedu.address.logic.commands.expense.ListCommand;
+import seedu.address.logic.commands.general.ExitCommand;
+import seedu.address.logic.commands.general.HelpCommand;
 
 /**
  * A utility class representing {@code AliasMappings} objects to be used in tests.
@@ -26,14 +26,14 @@ public class AliasTestUtil {
             "addchicken",
             FindCommand.COMMAND_WORD + DESCRIPTION_DESC_CHICKEN + PRICE_DESC_CHICKEN);
     public static final Alias ALIAS_FIND_SHORTCUT_INCOMPLETE = new Alias ("f", FindCommand.COMMAND_WORD);
-    private static final String IGNORED_VALUE = "ignored value";
-
     // for recursive
     public static final Alias ALIAS_A_TO_B = new Alias("a", "b");
     public static final Alias ALIAS_B_TO_C = new Alias("b", "c");
     public static final Alias ALIAS_C_TO_A = new Alias("c", "a");
-    public static final Alias ALIAS_TO_ALIAS = new Alias("d", AliasCommand.COMMAND_WORD);
+    //An alias mappings object with valid aliases stored.
+    public static final AliasMappings VALID_ALIAS_MAPPINGS;
 
+    private static final String IGNORED_VALUE = "ignored value";
     // for alias is reserved
     public static final Alias ALIAS_NAME_ADD = new Alias(AddCommand.COMMAND_WORD, IGNORED_VALUE);
     public static final Alias ALIAS_NAME_ALIAS = new Alias(AliasCommand.COMMAND_WORD, IGNORED_VALUE);
@@ -44,9 +44,6 @@ public class AliasTestUtil {
     public static final Alias ALIAS_NAME_FIND = new Alias(FindCommand.COMMAND_WORD, IGNORED_VALUE);
     public static final Alias ALIAS_NAME_HELP = new Alias(HelpCommand.COMMAND_WORD, IGNORED_VALUE);
     public static final Alias ALIAS_NAME_LIST = new Alias(ListCommand.COMMAND_WORD, IGNORED_VALUE);
-
-
-    public static final AliasMappings VALID_ALIAS_MAPPINGS;
 
     static {
         AliasMappings tempValidAliasMappings;
