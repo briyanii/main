@@ -1,8 +1,8 @@
 package seedu.address.ui;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_INPUT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ALIAS_ALIAS_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERIOD;
@@ -169,20 +169,23 @@ public class MainWindow extends UiPart<Stage> {
      */
     private void enableSyntaxHighlighting(CommandBox commandBox) {
         commandBox.importSyntaxStyleSheet(getRoot().getScene());
+
         // add supported commands (not all yet)
-        commandBox.enableSyntaxHightlightingForCommand("add",
+        commandBox.enableSyntaxHighlightingForCommand("add",
                 List.of(PREFIX_PRICE, PREFIX_DESCRIPTION));
-        commandBox.enableSyntaxHightlightingForCommand("alias",
+        commandBox.enableSyntaxHighlightingForCommand("alias",
                 List.of(PREFIX_ALIAS_ALIAS_NAME, PREFIX_ALIAS_ALIAS_INPUT));
-        commandBox.enableSyntaxHightlightingForCommand("budget",
+        commandBox.enableSyntaxHighlightingForCommand("budget",
                 List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_START_DATE, PREFIX_PERIOD));
-        commandBox.enableSyntaxHightlightingForCommand("event",
-                List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_TAG, PREFIX_TIMESTAMP));
-        commandBox.enableSyntaxHightlightingForCommand("stats",
+        commandBox.enableSyntaxHighlightingForCommand("switchbudget",
+                List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_START_DATE, PREFIX_PERIOD));
+        commandBox.enableSyntaxHighlightingForCommand("event",
+                List.of(PREFIX_DESCRIPTION, PREFIX_PRICE, PREFIX_CATEGORY, PREFIX_TIMESTAMP));
+        commandBox.enableSyntaxHighlightingForCommand("stats",
                 List.of(PREFIX_DESCRIPTION, PREFIX_START_DATE, PREFIX_END_DATE));
-        commandBox.enableSyntaxHightlightingForCommand("undo",
+        commandBox.enableSyntaxHighlightingForCommand("undo",
                 Collections.emptyList());
-        commandBox.enableSyntaxHightlightingForCommand("redo",
+        commandBox.enableSyntaxHighlightingForCommand("redo",
                 Collections.emptyList());
         commandBox.enableSyntaxHighlighting();
     }
@@ -266,11 +269,11 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             return commandResult;
-        } catch (CommandException | UnmappedPanelException e) {
+        } catch (CommandException | ParseException e) {
             logger.info("Invalid command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
-        } catch (ParseException e) {
+        } catch (UnmappedPanelException e) {
             logger.info("Invalid command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage() + "\n"
                     + String.format(ViewPanelCommand.SHOW_AVAILABLE_PANELS, singlePanelView.toString()));

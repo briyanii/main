@@ -1,6 +1,5 @@
 package seedu.address.testutil;
 
-import seedu.address.logic.commands.EditCommand.EditExpenseDescriptor;
 import seedu.address.logic.commands.expense.EditCommand;
 import seedu.address.model.category.Category;
 import seedu.address.model.expense.Description;
@@ -14,21 +13,21 @@ import seedu.address.model.expense.Timestamp;
  */
 public class EditExpenseDescriptorBuilder {
 
-    private EditExpenseDescriptor descriptor;
+    private EditCommand.EditExpenseDescriptor descriptor;
 
     public EditExpenseDescriptorBuilder() {
-        descriptor = new EditExpenseDescriptor();
+        descriptor = new EditCommand.EditExpenseDescriptor();
     }
 
-    public EditExpenseDescriptorBuilder(EditExpenseDescriptor descriptor) {
-        this.descriptor = new EditExpenseDescriptor(descriptor);
+    public EditExpenseDescriptorBuilder(EditCommand.EditExpenseDescriptor descriptor) {
+        this.descriptor = new EditCommand.EditExpenseDescriptor(descriptor);
     }
 
     /**
      * Returns an {@code EditExpenseDescriptor} with fields containing {@code expense}'s details
      */
     public EditExpenseDescriptorBuilder(Expense expense) {
-        descriptor = new EditExpenseDescriptor();
+        descriptor = new EditCommand.EditExpenseDescriptor();
         descriptor.setDescription(expense.getDescription());
         descriptor.setPrice(expense.getPrice());
         descriptor.setCategory(expense.getCategory());

@@ -3,7 +3,6 @@ package seedu.address.ui.budget;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
@@ -21,10 +20,6 @@ public class BudgetPanel extends Panel {
 
     @FXML
     private StackPane budgetCardPlaceholder;
-    @FXML
-    private Button previous;
-    @FXML
-    private Button next;
     @FXML
     private StackPane expenseListPanelPlaceholder;
     private ExpenseListPanel expenseListPanel;

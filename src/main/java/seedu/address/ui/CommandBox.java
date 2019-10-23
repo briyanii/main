@@ -82,7 +82,7 @@ public class CommandBox extends UiPart<Region> {
      * @param com The command word of the command
      * @param pre The prefix of the command
      */
-    public void enableSyntaxHightlightingForCommand(String com, List<Prefix> pre) {
+    public void enableSyntaxHighlightingForCommand(String com, List<Prefix> pre) {
         commandSyntaxHighlightingTextArea.createPattern(com, pre);
     }
 
