@@ -52,9 +52,9 @@ public class Budget {
         this.proportionUsed = new Percentage(0);
     }
 
+    //Constructor for system.
     public Budget(Description description, Price amount, Timestamp startDate,
                   Period period, ObservableList<Expense> expenses) {
-    //Constructor for system.
         requireAllNonNull(description, amount, startDate, period, expenses);
         this.description = description;
         this.amount = amount;
@@ -222,8 +222,8 @@ public class Budget {
         }
     }
 
-    public List<Expense> getCurrentPeriodExpenses() {
-        List<Expense> currentPeriodExpenses = new ArrayList<>();
+    public ObservableList<Expense> getCurrentPeriodExpenses() {
+        ObservableList<Expense> currentPeriodExpenses = FXCollections.observableArrayList();
         expenses.stream().forEach(expense -> {
             if (withinCurrentPeriod(expense.getTimestamp())) {
                 currentPeriodExpenses.add(expense);
