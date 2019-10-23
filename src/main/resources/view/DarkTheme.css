@@ -4,7 +4,6 @@
     -colour-medium2: #73969c;
     -colour-dark: #35495e;
     -colour-highlight: #ff7e67;
-    
     -moneyout: #cc2c29;
     -black1: black;
     -grey1: #aaaaaa;
@@ -113,13 +112,11 @@
     -fx-padding: 10;
 }
 
-
 /*
  * Metro style Push Button
  * Author: Pedro 5Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
-
 
 .scroll-bar {
     -fx-max-width: 0;
@@ -160,7 +157,6 @@
     -fx-fill: -colour-highlight;
 }
 
-
 #expenseCardPane .label {
     -fx-font-family: -font-semibold;
     -fx-font-size: 16px;
@@ -176,7 +172,6 @@
     -fx-text-fill: -moneyout;
     -fx-padding: 0 5 0 0;
 }
-
 
 #commandTypeLabel {
     -fx-font-size: 11px;
