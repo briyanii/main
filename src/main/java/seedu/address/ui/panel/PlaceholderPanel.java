@@ -9,10 +9,9 @@ import javafx.scene.layout.StackPane;
  */
 public class PlaceholderPanel extends Panel {
 
+    private static final String PLACEHOLDER_PANEL_MESSAGE = "This panel is empty!";
     @FXML
     private StackPane panelPlaceholder;
-
-    private static final String PLACEHOLDER_PANEL_MESSAGE = "This panel is empty!";
 
     public PlaceholderPanel() {
         super(SinglePanelView.FXML);
@@ -20,9 +19,9 @@ public class PlaceholderPanel extends Panel {
 
     @Override
     public void view() {
-        panelPlaceholder.getChildren().add(new Label("This is not the Panel you are looking for."));
         getRoot().setVisible(true);
         getRoot().setDisable(false);
+        panelPlaceholder.getChildren().add(new Label("This is not the Panel you are looking for."));
     }
 
     @Override

@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.budget.Budget;
-import seedu.address.model.expense.Description;
 import seedu.address.ui.expense.ExpenseListPanel;
 import seedu.address.ui.panel.Panel;
 import seedu.address.ui.panel.PanelName;
@@ -16,9 +15,8 @@ import seedu.address.ui.panel.PanelName;
  * Panel containing the list of expenses.
  */
 public class BudgetPanel extends Panel {
-    private static final String FXML = "BudgetPanel.fxml";
     public static final PanelName PANEL_NAME = new PanelName("Primary Budget");
-
+    private static final String FXML = "BudgetPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(BudgetPanel.class);
 
     @FXML

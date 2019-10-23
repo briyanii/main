@@ -34,7 +34,8 @@ public class CommandBox extends UiPart<Region> {
         this.commandExecutor = commandExecutor;
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandSyntaxHighlightingTextArea = new CommandSyntaxHighlightingTextArea();
-        commandSyntaxHighlightingTextArea.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+        commandSyntaxHighlightingTextArea.textProperty()
+                .addListener((unused1, unused2, unused3) -> setStyleToDefault());
         commandInputAreaPlaceholder.getChildren().add(commandSyntaxHighlightingTextArea);
 
         commandSyntaxHighlightingTextArea.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {

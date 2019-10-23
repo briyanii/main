@@ -64,16 +64,12 @@ import seedu.address.logic.parser.Prefix;
  */
 public class CommandSyntaxHighlightingTextArea extends StackPane {
 
-    private TextArea textArea;
-    private StyleClassedTextArea styleClassedTextArea;
-
-    private Map<String, Pattern> stringPatternMap;
-    private Map<String, Integer> stringIntMap;
-    private Map<String, String> stringAutofillMap;
-
     private static final String PLACE_HOLDER_REGEX = "(?<placeholder><[^>]+>)";
     private static final String INPUT_PATTERN_TEMPLATE = "(?<COMMAND>%s)|" + PLACE_HOLDER_REGEX + "|%s(?<arg>\\S+)";
-
+    private static final KeyEvent RIGHT_ARROW = new KeyEvent(null, null, KeyEvent.KEY_PRESSED, "", "",
+            KeyCode.RIGHT, false, false, false, false);
+    private static final KeyEvent LEFT_ARROW = new KeyEvent(null, null, KeyEvent.KEY_PRESSED, "", "",
+            KeyCode.LEFT, false, false, false, false);
     private static Predicate<KeyEvent> addsCharacterToTextArea = keyEvent -> keyEvent.getCode().isLetterKey()
             || keyEvent.getCode().isDigitKey()
             || keyEvent.getCode().equals(KeyCode.COLON) || keyEvent.getCode().equals(KeyCode.SEMICOLON)
@@ -86,14 +82,11 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
             || keyEvent.getCode().equals(KeyCode.QUOTE) || keyEvent.getCode().equals(KeyCode.BACK_QUOTE)
             || keyEvent.getCode().equals(KeyCode.SPACE) || keyEvent.getCode().equals(KeyCode.EQUALS)
             || keyEvent.getCode().equals(KeyCode.MINUS);
-
-
     private static InputMap<Event> consumeMassDeletionEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(BACK_SPACE, SHIFT_ANY, SHORTCUT_DOWN),
             keyPressed(X, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(BACK_SPACE, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(X, SHIFT_ANY, SHORTCUT_DOWN)));
-
     private static InputMap<Event> consumeMassSelectionEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(LEFT, SHIFT_DOWN, SHORTCUT_ANY),
             keyPressed(KP_LEFT, SHIFT_DOWN, SHORTCUT_ANY),
@@ -119,31 +112,26 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
             eventType(MouseEvent.MOUSE_DRAGGED),
             eventType(MouseEvent.DRAG_DETECTED),
             mousePressed().unless(e -> e.getClickCount() == 1 && !e.isShiftDown())));
-
     private static InputMap<Event> consumeCopyPasteEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(C, SHIFT_ANY, SHORTCUT_DOWN),
             keyPressed(V, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(C, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(V, SHIFT_ANY, SHORTCUT_DOWN)));
-
     private static InputMap<Event> consumeEnterKeyEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(ENTER, SHIFT_ANY, SHORTCUT_ANY),
             keyReleased(ENTER, SHIFT_ANY, SHORTCUT_ANY)));
-
     private static InputMap<Event> consumeUndoRedoEvent = InputMap.consume(EventPattern.anyOf(
             keyPressed(Y, SHIFT_ANY, SHORTCUT_DOWN),
             keyPressed(KeyCode.Z, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(Y, SHIFT_ANY, SHORTCUT_DOWN),
             keyReleased(KeyCode.Z, SHIFT_ANY, SHORTCUT_DOWN)));
-
     private static InputMap<Event> consumeContextMenuRequestEvent = InputMap.consume(EventPattern.anyOf(
             eventType(ContextMenuEvent.CONTEXT_MENU_REQUESTED)));
-
-    private static final KeyEvent RIGHT_ARROW = new KeyEvent(null, null, KeyEvent.KEY_PRESSED, "", "",
-            KeyCode.RIGHT, false, false, false, false);
-    private static final KeyEvent LEFT_ARROW = new KeyEvent(null, null, KeyEvent.KEY_PRESSED, "", "",
-            KeyCode.LEFT, false, false, false, false);
-    
+    private TextArea textArea;
+    private StyleClassedTextArea styleClassedTextArea;
+    private Map<String, Pattern> stringPatternMap;
+    private Map<String, Integer> stringIntMap;
+    private Map<String, String> stringAutofillMap;
     private Subscription syntaxHighlightSubscription;
 
     public CommandSyntaxHighlightingTextArea() {
@@ -178,7 +166,7 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
 
         textArea.caretPositionProperty().addListener((observableValue, number, t1) -> {
             try {
-                if ((int)t1 != styleClassedTextArea.getCaretPosition()) {
+                if ((int) t1 != styleClassedTextArea.getCaretPosition()) {
                     styleClassedTextArea.displaceCaret((int) t1);
                 }
             } catch (IndexOutOfBoundsException e) {
@@ -239,6 +227,9 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
         Nodes.addInputMap(styleClassedTextArea, consumeEnterKeyEvent);
     }
 
+    /**
+     * Clears the text.
+     */
     public void clear() {
         textArea.clear();
         styleClassedTextArea.clear();
@@ -269,6 +260,11 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
                         });
     }
 
+    /**
+     * Fires a keyEvent in the visible text area, if it will result in a change in the visible text.
+     * @param visibleTextArea The visible text area to mirror the key event event
+     * @param keyEvent The keyEvent which may need to be mirrored.
+     */
     private void mirrorViewportMovement(StyleClassedTextArea visibleTextArea, KeyEvent keyEvent) {
         // mirrors navigation
         if (keyEvent.getCode().isNavigationKey()) {
@@ -388,9 +384,9 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
         return spansBuilder.create();
     }
 
-    // adapted from RichTextFX JavaKeywordDemo
     /**
      * Returns the StyleSpans to apply rich text formatting to the text area, using a given pattern.
+     * (adapted from RichTextFX's JavaKeywordsDemo.java)
      *
      * @param text The text to be formatted (guaranteed that the input's command word matches this pattern).
      * @param pattern The pattern used to apply formatting.
@@ -402,7 +398,6 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
         Matcher matcher = pattern.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
-        String command = null;
         String lastPrefix = null;
 
         // style command word
@@ -463,7 +458,12 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
         return spansBuilder.create();
     }
 
-    // text formatter to handle replacing of placeholders
+    /**
+     * Take a {@code TextFormatter.Change} and returns a new {@code TextFormatter.Change} with appropriate modifcation
+     * in order to handle auto fill and syntax suggestion.
+     * @param change The original non-formatted changes.
+     * @return The formatted changes.
+     */
     private TextFormatter.Change autofillAndPlaceholderReplacement(TextFormatter.Change change) {
         if (change.isContentChange()) {
             // prevent manually entering < > placeholder indicators
@@ -485,7 +485,7 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
                     int commandWordEnd = command.group().stripTrailing().length();
                     int commandWordStart = command.group().length() - command.group().stripLeading().length();
 
-                    if (change.getCaretPosition() <=  commandWordEnd
+                    if (change.getCaretPosition() <= commandWordEnd
                             && change.getCaretPosition() >= commandWordStart) {
                         change.setRange(0, change.getControlNewText().length() - 1);
                         change.setText(stringAutofillMap.get(command.group("COMMAND")));
@@ -495,9 +495,6 @@ public class CommandSyntaxHighlightingTextArea extends StackPane {
 
             } else if (command.find()) {
                 String commandWord = command.group("COMMAND");
-                // match syntax
-                // Pattern syntaxRegex = Pattern.compile("(?<commandWord>" + commandWord + ")|
-                // (?<prefix>(\\p{Alnum}+)/)|(?<placeholder><[^>]+>)|(?<argument>\\S+)");
                 Pattern placeHolderPattern = Pattern.compile(PLACE_HOLDER_REGEX);
                 Matcher placeholder = placeHolderPattern.matcher(change.getControlText());
                 // find group until caret lies inside

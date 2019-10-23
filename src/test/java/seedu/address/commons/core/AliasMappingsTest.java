@@ -55,8 +55,8 @@ class AliasMappingsTest {
     @Test
     void aliasUsesReservedName_aliasDoesNotUseReservedName_returnsFalse() {
         AliasMappings aliasMappings = new AliasMappings();
-        assertFalse(aliasMappings.aliasUsesReservedName(new Alias("somethingelse",  "ignored")));
-        assertFalse(aliasMappings.aliasUsesReservedName(new Alias("anotherNotCommand",  "ignored")));
+        assertFalse(aliasMappings.aliasUsesReservedName(new Alias("somethingelse", "ignored")));
+        assertFalse(aliasMappings.aliasUsesReservedName(new Alias("anotherNotCommand", "ignored")));
     }
 
     @Test

@@ -22,11 +22,8 @@ import seedu.address.model.expense.Timestamp;
 public class Budget {
 
     private static final Description DEFAULT_BUDGET_DESCRIPTION = new Description("Default Budget");
-    //private static final Price DEFAULT_BUDGET_AMOUNT = new Price(Double.toString(Double.MAX_VALUE));
     private static final Price DEFAULT_BUDGET_AMOUNT = new Price("100000000000");
-    //private static final LocalDate DEFAULT_BUDGET_START_DATE = LocalDate.MIN;
     private static final Timestamp DEFAULT_BUDGET_START_DATE = new Timestamp(LocalDate.of(2000, 1, 1));
-    //private static final Period DEFAULT_BUDGET_PERIOD = Period.between(LocalDate.MIN, LocalDate.MAX);
     private static final Period DEFAULT_BUDGET_PERIOD = Period.ofYears(999);
     private static final Percentage IS_NEAR_THRESHOLD = new Percentage(90);
 
@@ -51,7 +48,8 @@ public class Budget {
         this.proportionUsed = new Percentage(0);
     }
 
-    public Budget(Description description, Price amount, Timestamp startDate, Period period, ObservableList<Expense> expenses) {
+    public Budget(Description description, Price amount, Timestamp startDate,
+                  Period period, ObservableList<Expense> expenses) {
         requireAllNonNull(description, amount, startDate, period, expenses);
         this.description = description;
         this.amount = amount;

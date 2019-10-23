@@ -1,4 +1,4 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.expense;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.testutil.TypicalExpenses.getTypicalAddressBook;
@@ -6,7 +6,6 @@ import static seedu.address.testutil.TypicalExpenses.getTypicalAddressBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.expense.AddCommand;
 import seedu.address.model.Model;
 import seedu.address.model.ModelHistory;
 import seedu.address.model.ModelManager;

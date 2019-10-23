@@ -30,7 +30,8 @@ public class CommandResult {
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, boolean statistic, boolean forcePanelChange, PanelName panelName) {
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, boolean statistic,
+                         boolean forcePanelChange, PanelName panelName) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;

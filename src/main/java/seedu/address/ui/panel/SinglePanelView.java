@@ -17,13 +17,11 @@ import seedu.address.ui.panel.exceptions.UnmappedPanelException;
  */
 public class SinglePanelView extends UiPart<Region> implements PanelManager {
 
+    public static final String FXML = "PanelView.fxml";
     private Map<PanelName, Panel> panelNamePanelHashMap;
     private Panel currentPanel;
-
     @FXML
     private StackPane panelPlaceholder;
-
-    public static final String FXML = "PanelView.fxml";
 
     /**
      * Constructor for the PanelView.
@@ -85,8 +83,6 @@ public class SinglePanelView extends UiPart<Region> implements PanelManager {
         return panelNamePanelHashMap.containsKey(panelName)
                 // not mapped to null object
                 && panelNamePanelHashMap.get(panelName) != null
-                // not mapped to a placeholder
-                && !(panelNamePanelHashMap.get(panelName) instanceof PlaceholderPanel)
                 // mapped panel is child of stackPane
                 && panelPlaceholder.getChildren().contains(panelNamePanelHashMap.get(panelName).getRoot());
     }
@@ -101,7 +97,7 @@ public class SinglePanelView extends UiPart<Region> implements PanelManager {
     }
 
     @Override
-    public Panel removePanel(PanelName panelName) throws UnmappedPanelException{
+    public Panel removePanel(PanelName panelName) throws UnmappedPanelException {
         if (!panelNamePanelHashMap.containsKey(panelName)) {
             throw new UnmappedPanelException(panelName);
         }
@@ -112,5 +108,15 @@ public class SinglePanelView extends UiPart<Region> implements PanelManager {
         panelPlaceholder.getChildren().remove(p.getRoot());
 
         return p;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder available = new StringBuilder();
+        for (PanelName panelName : panelNamePanelHashMap.keySet()) {
+            available.append(panelName.toString());
+            available.append("\n");
+        }
+        return available.toString();
     }
 }

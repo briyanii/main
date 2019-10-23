@@ -9,7 +9,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.expense.Description;
 import seedu.address.model.expense.Expense;
 import seedu.address.ui.panel.Panel;
 import seedu.address.ui.panel.PanelName;
@@ -18,9 +17,8 @@ import seedu.address.ui.panel.PanelName;
  * Panel containing the list of expenses.
  */
 public class ExpenseListPanel extends Panel {
-    private static final String FXML = "ListPanel.fxml";
     public static final PanelName PANEL_NAME = new PanelName("Expense List");
-
+    private static final String FXML = "ListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(ExpenseListPanel.class);
 
     @FXML

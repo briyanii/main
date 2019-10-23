@@ -18,8 +18,11 @@ public class AliasCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "alias";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Create a shortcut for commonly used Commands.\n"
-            + "Parameters: " + PREFIX_ALIAS_ALIAS_NAME + " <alias name>  " + PREFIX_ALIAS_ALIAS_INPUT + " <input string> \n"
-            + "Example: alias " + PREFIX_ALIAS_ALIAS_NAME + " findAnimal " + PREFIX_ALIAS_ALIAS_INPUT + " find rat rats mouse mice cow cows ox oxen tiger tigers";
+            + "Parameters: " + PREFIX_ALIAS_ALIAS_NAME
+            + " <alias name>  " + PREFIX_ALIAS_ALIAS_INPUT + " <input string> \n"
+            + "Example: alias " + PREFIX_ALIAS_ALIAS_NAME
+            + " findAnimal " + PREFIX_ALIAS_ALIAS_INPUT
+            + " find rat rats mouse mice cow cows ox oxen tiger tigers";
 
     public static final String MESSAGE_SUCCESS = "Alias created: %1$s";
 
