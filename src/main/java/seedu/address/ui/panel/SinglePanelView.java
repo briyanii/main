@@ -55,6 +55,10 @@ public class SinglePanelView extends UiPart<Region> implements PanelManager {
         currentPanel = getPanel(panelName);
     }
 
+    public Panel getCurrentPanel() {
+        return currentPanel;
+    }
+
     // -------- PanelManager Method Implementations ------------------
 
     @Override

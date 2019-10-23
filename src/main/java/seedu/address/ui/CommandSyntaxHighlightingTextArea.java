@@ -64,7 +64,7 @@ import seedu.address.logic.parser.Prefix;
  */
 public class CommandSyntaxHighlightingTextArea extends StackPane {
 
-    public  TextArea textArea;
+    private TextArea textArea;
     private StyleClassedTextArea styleClassedTextArea;
 
     private Map<String, Pattern> stringPatternMap;
