@@ -36,7 +36,7 @@ public class ExpenseListPanelTest extends GuiUnitTest {
     private static final ObservableList<Expense> TYPICAL_EXPENSES =
             FXCollections.observableList(getTypicalExpenses());
 
-    private static final long CARD_CREATION_AND_DELETION_TIMEOUT = 3500;
+    private static final long CARD_CREATION_AND_DELETION_TIMEOUT = 3000;
 
     private final SimpleObjectProperty<Expense> selectedPerson = new SimpleObjectProperty<>();
     private ExpenseListPanelHandle expenseListPanelHandle;
@@ -72,7 +72,7 @@ public class ExpenseListPanelTest extends GuiUnitTest {
     }
 
     /**
-     * Verifies that creating and deleting large number of persons in {@code PersonListPanel} requires lesser than
+     * Verifies that creating large of expenses in {@code ExpenseListPanel} requires lesser than
      * {@code CARD_CREATION_AND_DELETION_TIMEOUT} milliseconds to execute.
      */
     @Test
@@ -81,23 +81,22 @@ public class ExpenseListPanelTest extends GuiUnitTest {
 
         assertTimeoutPreemptively(ofMillis(CARD_CREATION_AND_DELETION_TIMEOUT), () -> {
             initUi(backingList);
-            guiRobot.interact(backingList::clear);
-        }, "Creation and deletion of person cards exceeded time limit");
+        }, "Creation of expense cards exceeded time limit");
     }
 
     /**
-     * Returns a list of persons containing {@code personCount} persons that is used to populate the
+     * Returns a list of expenses containing {@code expenseCount} expenses that is used to populate the
      * {@code PersonListPanel}.
      */
-    private ObservableList<Expense> createBackingList(int personCount) {
+    private ObservableList<Expense> createBackingList(int expenseCount) {
         ObservableList<Expense> backingList = FXCollections.observableArrayList();
-        for (int i = 0; i < personCount; i++) {
+        for (int i = 0; i < expenseCount; i++) {
             Description name = new Description(i + "a");
             Description budgetName = new Description("budgey");
             Price price = new Price("1");
             Category category = new Category("FOOD");
             UniqueIdentifier uniqueIdentifier =
-                    new UniqueIdentifier(String.format("Expense@00000000-0000-0000-0000-0000000%5d", personCount));
+                    new UniqueIdentifier(String.format("Expense@00000000-0000-0000-0000-0000000%5d", expenseCount));
             Timestamp timestamp = new Timestamp(LocalDateTime.of(2019, 11, 1, 0, 0));
             backingList.add(new Expense(name, price, category, timestamp, budgetName, uniqueIdentifier));
         }
@@ -105,7 +104,7 @@ public class ExpenseListPanelTest extends GuiUnitTest {
     }
 
     /**
-     * Initializes {@code personListPanelHandle} with a {@code PersonListPanel} backed by {@code backingList}.
+     * Initializes {@code expenseListPanelHandle} with a {@code PersonListPanel} backed by {@code backingList}.
      * Also shows the {@code Stage} that displays only {@code PersonListPanel}.
      */
     private void initUi(ObservableList<Expense> backingList) {
