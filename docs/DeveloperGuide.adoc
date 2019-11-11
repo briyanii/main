@@ -789,16 +789,14 @@ can be a possible complementary feature to a prediction feature to pre-empt user
 Last of all, more modes can be added to all existing commands, such as comparing with periods across different budgets
 other than being restricted within the same budget
 
+// tag::alias[]
 
-
-
-
-
-// category::Alias[]
 === Alias feature
-==== Implementation
 The Alias feature allows users to assign inputs they may use very often to a shortcut, and execute the input by entering
 the shortcut, (a.k.a ``Alias``), in place of the full or partial command.
+
+
+==== Implementation
 
 .AliasMappings Class Diagram
 image::AliasMappingsClassDiagram.png[AliasMappingsClassDiagram]
@@ -892,6 +890,7 @@ When a user enters an ``input`` to be executed, the ``MooLahParser`` will do the
 .. Finally, the ``MooLahParser`` re-parses the modified ``input``.
 . If this too fails, an exception is thrown indicating that the command was invalid
 
+
 ==== Design Considerations
 
 ===== Potential Recusive aliases
@@ -927,6 +926,8 @@ The purpose behind this feature was to make CLI input less troublesome, so users
 to carry out commands they may use frequently. In v2.0 we want to look into using data analysis track users' input habits in
 order to make suggestions on possible shortcuts or Aliases they may find convenient to have.
 
+// end::alias[]
+
 ===== Aspect: Data structure to store Aliases.
 
 * ** Alternative 1:** List
@@ -949,10 +950,8 @@ It also makes it easier to prevent sharing of alias names between aliases and a 
 set cannot contain duplicates, and makes it easier to handle overwriting of existing aliases with same name.
 
 
-// end::Alias[]
 
-
-// category::CommandLine[]
+// tag::CommandLine[]
 === Easier Command-Line feature
 ==== Necessity of feature.
 Due to the constraints of this project, the application had to be designed such that the main interaction
