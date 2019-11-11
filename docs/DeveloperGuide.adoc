@@ -952,7 +952,7 @@ set cannot contain duplicates, and makes it easier to handle overwriting of exis
 // end::Alias[]
 
 
-// category::SyntaxAutofill[]
+// category::CommandLine[]
 === Easier Command-Line feature
 ==== Necessity of feature.
 Due to the constraints of this project, the application had to be designed such that the main interaction
@@ -1081,11 +1081,7 @@ features, it may becomes a problem that command words become very long in order 
 does when there are multiple commands which do similar things in different context. This feature reduces the ambiguity of
 a command by enabling certain common command words to behave differently depending on which `panel` of the UI the user is viewing.
 
-
-
-
-
-// end::SyntaxAutofill[]
+// end::CommandLine[]
 
 === Logging
 
